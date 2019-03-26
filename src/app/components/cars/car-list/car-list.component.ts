@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CarService  } from '../shared/car.service';
 import { Car } from '../shared/car.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-car-list',
@@ -10,7 +11,7 @@ import { Car } from '../shared/car.model';
 export class CarListComponent implements OnInit {
   carList: Car[];
 
-  constructor(private carService: CarService) { }
+  constructor(private carService: CarService, private toastr: ToastrService) { }
 
   ngOnInit() {
     const data = this.carService.getData();
@@ -26,5 +27,12 @@ export class CarListComponent implements OnInit {
 
   onEdit(car: Car) {
     this.carService.selectedCar = Object.assign({}, car);
+  }
+
+  onDelete(key: string) {
+    if (confirm('Are sure to delete this record?') === true) {
+      this.carService.deleteCar(key);
+      this.toastr.warning('Deleted Successfully', 'Car register');
+    }
   }
 }
