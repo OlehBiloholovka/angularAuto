@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import {AngularFireModule} from '@angular/fire';
 import {AngularFireDatabaseModule} from '@angular/fire/database';
 import { FormsModule } from '@angular/forms';
+import {ToastrModule} from 'ngx-toastr';
 
 import { AppComponent } from './app.component';
 import {environment} from '../environments/environment';
@@ -21,7 +22,8 @@ import { CarListComponent } from './components/cars/car-list/car-list.component'
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
-    FormsModule
+    FormsModule,
+    ToastrModule.forRoot()
   ],
   providers: [],
   bootstrap: [AppComponent]

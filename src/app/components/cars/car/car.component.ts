@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CarService } from '../shared/car.service';
 import { NgForm } from '@angular/forms';
-import {modelGroupProvider} from '@angular/forms/src/directives/ng_model_group';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-car',
@@ -10,16 +10,20 @@ import {modelGroupProvider} from '@angular/forms/src/directives/ng_model_group';
 })
 export class CarComponent implements OnInit {
 
-  constructor(private carService: CarService) { }
+  constructor(private carService: CarService, private toastr: ToastrService) { }
 
   ngOnInit() {
+    this.carService.getData();
     this.onResetForm();
   }
 
   onSubmit(carForm: NgForm) {
+    this.carService.insertCar(carForm.value);
+    this.onResetForm(carForm);
+    this.toastr.success('Submitted Successfully', 'Car Register');
   }
 
-  onResetForm(carForm: NgForm) {
+  onResetForm(carForm?: NgForm) {
     if (carForm != null) carForm.reset();
     this.carService.selectedCar = {
       $key: null,
@@ -28,8 +32,9 @@ export class CarComponent implements OnInit {
       year: 2000,
       engine: 0.0,
       engineType: '',
-      mileage: 10000,
-      options: []
+      mileage: 10000
+      // ,
+      // options: []
     };
   }
 }

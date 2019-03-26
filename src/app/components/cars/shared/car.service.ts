@@ -24,7 +24,7 @@ export class CarService {
       engine: car.engine,
       engineType: car.engineType,
       mileage: car.mileage,
-      options: car.options
+      // options: car.options
     });
   }
 
@@ -37,7 +37,7 @@ export class CarService {
          engine: car.engine,
          engineType: car.engineType,
          mileage: car.mileage,
-         options: car.options
+         // options: car.options
      });
   }
 
