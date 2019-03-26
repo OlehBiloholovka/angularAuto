@@ -18,7 +18,11 @@ export class CarComponent implements OnInit {
   }
 
   onSubmit(carForm: NgForm) {
-    this.carService.insertCar(carForm.value);
+    if (carForm.value.$key == null) {
+      this.carService.insertCar(carForm.value);
+    } else {
+      this.carService.updateCar(carForm.value);
+    }
     this.onResetForm(carForm);
     this.toastr.success('Submitted Successfully', 'Car Register');
   }

@@ -1,20 +1,21 @@
 <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" >
+  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="carService.selectedCar.$key" >
   <div class="from-group">
     <label>Name</label>
-    <input class="form-control" name="name" #name="ngModel" [(ngModel)]="carService.name" placeholder="Name" required>
+    <input class="form-control" name="name" #name="ngModel" [(ngModel)]="carService.selectedCar.name" placeholder="Name" required>
   </div>
   <div class="from-group">
     <label>Model</label>
-    <input class="form-control" name="model" #model="ngModel" [(ngModel)]="carService.model" placeholder="Model" required>
+    <input class="form-control" name="model" #model="ngModel" [(ngModel)]="carService.selectedCar.model" placeholder="Model" required>
   </div>
   <div class="from-group">
     <label>Year</label>
-    <input class="form-control" name="year" #year="ngModel" [(ngModel)]="carService.year" placeholder="Year" required>
+    <input class="form-control" name="year" #year="ngModel" [(ngModel)]="carService.selectedCar.year" placeholder="Year" required>
   </div>
   <div class="from-group">
     <label>Engine</label>
     <div class="input-group">
-      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="carService.engine" placeholder="Engine" required>
+      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="carService.selectedCar.engine" placeholder="Engine" required>
       <div class="input-group-append">
         <span class="input-group-text">L</span>
       </div>
@@ -22,12 +23,12 @@
   </div>
   <div class="from-group">
     <label>EngineType</label>
-    <input class="form-control" name="engineType" #engineType="ngModel" [(ngModel)]="carService.engineType" placeholder="EngineType" required>
+    <input class="form-control" name="engineType" #engineType="ngModel" [(ngModel)]="carService.selectedCar.engineType" placeholder="EngineType" required>
   </div>
   <div class="from-group">
     <label>Mileage</label>
     <div class="input-group">
-      <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="carService.mileage" placeholder="Mileage" required>
+      <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="carService.selectedCar.mileage" placeholder="Mileage" required>
       <div class="input-group-append">
         <span class="input-group-text">KM</span>
       </div>

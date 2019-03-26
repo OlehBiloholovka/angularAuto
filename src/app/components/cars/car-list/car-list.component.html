@@ -1,3 +1,22 @@
-<p>
-  car-list works!
-</p>
+<h6 class="text-center">
+  Car Register
+</h6><br>
+<table class="table table-sm table-hover">
+  <tr *ngFor="let car of carList">
+    <td>{{car.name}}</td>
+    <td>{{car.model}}</td>
+    <td>{{car.year}}</td>
+    <td>
+      <button class="btn btn-success" (click)="onEdit(car)">edit</button>
+      <button class="btn btn-danger" (click)="onEdit(car)">delete</button>
+      <!--<a class="btn" (click)="onEdit(car)">-->
+        <!--edit-->
+        <!--&lt;!&ndash;<i class="fa fa-pencil-square-o"></i>&ndash;&gt;-->
+      <!--</a>-->
+      <!--<a class="btn">-->
+        <!--delete-->
+        <!--&lt;!&ndash;<i class="fa fa-trash-o"></i>&ndash;&gt;-->
+      <!--</a>-->
+    </td>
+  </tr>
+</table>
