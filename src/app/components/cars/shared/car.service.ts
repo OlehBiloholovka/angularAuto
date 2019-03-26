@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {AngularFireDatabase, AngularFireList} from '@angular/fire/database';
-import {Car} from './car.model';
+import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+import { Car } from './car.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class CarService {
       year: car.year,
       engine: car.engine,
       engineType: car.engineType,
-      kilometrage: car.kilometrage,
+      mileage: car.mileage,
       options: car.options
     });
   }
@@ -36,7 +36,7 @@ export class CarService {
          year: car.year,
          engine: car.engine,
          engineType: car.engineType,
-         kilometrage: car.kilometrage,
+         mileage: car.mileage,
          options: car.options
      });
   }

@@ -1,3 +1,44 @@
-<p>
-  car works!
-</p>
+<form #carForm="ngForm" >
+  <div class="from-group">
+    <label>Name</label>
+    <input class="form-control" name="name" #name="ngModel" [(ngModel)]="carService.name" placeholder="Name">
+  </div>
+  <div class="from-group">
+    <label>Model</label>
+    <input class="form-control" name="model" #model="ngModel" [(ngModel)]="carService.model" placeholder="Model">
+  </div>
+  <div class="from-group">
+    <label>Year</label>
+    <input class="form-control" name="year" #year="ngModel" [(ngModel)]="carService.year" placeholder="Year">
+  </div>
+  <div class="from-group">
+    <label>Engine</label>
+    <div class="input-group">
+      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="carService.engine" placeholder="Engine">
+      <div class="input-group-append">
+        <span class="input-group-text">L</span>
+      </div>
+    </div>
+  </div>
+  <div class="from-group">
+    <label>EngineType</label>
+    <input class="form-control" name="engineType" #engineType="ngModel" [(ngModel)]="carService.engineType" placeholder="EngineType">
+  </div>
+  <div class="from-group">
+    <label>Mileage</label>
+    <div class="input-group">
+      <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="carService.mileage" placeholder="Mileage">
+      <div class="input-group-append">
+        <span class="input-group-text">KM</span>
+      </div>
+    </div>
+  </div>
+  <div class="from-group">
+    <label>Options</label>
+    <input class="form-control" name="options" #options="ngModel" [(ngModel)]="carService.options" placeholder="Option">
+  </div>
+  <div class="form-group">
+    <button class="btn btn-success" type="submit">Submit</button>
+    <button class="btn btn-danger" type="reset">Reset</button>
+  </div>
+</form>
