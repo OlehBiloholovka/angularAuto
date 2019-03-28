@@ -6,5 +6,6 @@ export class Car {
   engine: number;
   engineType: string;
   mileage: number;
+  price: number;
   // options: string[];
 }

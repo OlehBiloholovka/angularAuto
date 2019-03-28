@@ -34,6 +34,15 @@
       </div>
     </div>
   </div>
+  <div class="from-group">
+    <label>Price</label>
+    <div class="input-group">
+      <input class="form-control" name="price" #price="ngModel" [(ngModel)]="carService.selectedCar.price" placeholder="Price" required>
+      <div class="input-group-append">
+        <span class="input-group-text">$</span>
+      </div>
+    </div>
+  </div>
   <!--<div class="from-group">-->
     <!--<label>Options</label>-->
     <!--<input class="form-control" name="options" #options="ngModel" [(ngModel)]="carService.options" placeholder="Option">-->

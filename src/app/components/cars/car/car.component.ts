@@ -36,7 +36,8 @@ export class CarComponent implements OnInit {
       year: 2000,
       engine: 0.0,
       engineType: '',
-      mileage: 10000
+      mileage: 10000,
+      price: 10000
       // ,
       // options: []
     };

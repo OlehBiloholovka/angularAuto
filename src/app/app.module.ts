@@ -10,13 +10,15 @@ import {environment} from '../environments/environment';
 import { CarComponent } from './components/cars/car/car.component';
 import { CarsComponent } from './components/cars/cars.component';
 import { CarListComponent } from './components/cars/car-list/car-list.component';
+import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CarComponent,
     CarsComponent,
-    CarListComponent
+    CarListComponent,
+    HeaderComponent
   ],
   imports: [
     BrowserModule,
