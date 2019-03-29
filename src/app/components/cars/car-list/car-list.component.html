@@ -8,16 +8,8 @@
     <td>{{car.year}}</td>
     <td>{{car.price}}</td>
     <td>
-      <button class="btn btn-success" (click)="onEdit(car)">edit</button>
-      <button class="btn btn-danger" (click)="onDelete(car.$key)">delete</button>
-      <!--<a class="btn" (click)="onEdit(car)">-->
-        <!--edit-->
-        <!--&lt;!&ndash;<i class="fa fa-pencil-square-o"></i>&ndash;&gt;-->
-      <!--</a>-->
-      <!--<a class="btn">-->
-        <!--delete-->
-        <!--&lt;!&ndash;<i class="fa fa-trash-o"></i>&ndash;&gt;-->
-      <!--</a>-->
+      <button class="btn btn-sm btn-success mr-2" (click)="onEdit(car)">edit</button>
+      <button class="btn btn-sm btn-danger" (click)="onDelete(car.$key)">delete</button>
     </td>
   </tr>
 </table>

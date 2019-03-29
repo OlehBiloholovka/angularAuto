@@ -1,42 +1,53 @@
 <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" >
   <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="carService.selectedCar.$key" >
-  <div class="from-group">
-    <label>Name</label>
-    <input class="form-control" name="name" #name="ngModel" [(ngModel)]="carService.selectedCar.name" placeholder="Name" required>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">Brand</label>
+    <input class="col-sm-4 form-control" name="name" #name="ngModel" [(ngModel)]="carService.selectedCar.name" placeholder="Name" required>
   </div>
-  <div class="from-group">
-    <label>Model</label>
-    <input class="form-control" name="model" #model="ngModel" [(ngModel)]="carService.selectedCar.model" placeholder="Model" required>
+  <br>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">Model</label>
+    <input class="col-sm-4 form-control" name="model" #model="ngModel" [(ngModel)]="carService.selectedCar.model" placeholder="Model" required>
   </div>
-  <div class="from-group">
-    <label>Year</label>
-    <input class="form-control" name="year" #year="ngModel" [(ngModel)]="carService.selectedCar.year" placeholder="Year" required>
-  </div>
-  <div class="from-group">
-    <label>Engine</label>
-    <div class="input-group">
-      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="carService.selectedCar.engine" placeholder="Engine" required>
+  <br>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">First Registration</label>
+    <div class="col-sm-4 input-group px-0">
+      <input class="form-control" name="year" #year="ngModel" [(ngModel)]="carService.selectedCar.year" placeholder="Year" required>
       <div class="input-group-append">
-        <span class="input-group-text">L</span>
+        <span class="input-group-text">year</span>
       </div>
     </div>
   </div>
-  <div class="from-group">
-    <label>EngineType</label>
-    <input class="form-control" name="engineType" #engineType="ngModel" [(ngModel)]="carService.selectedCar.engineType" placeholder="EngineType" required>
-  </div>
-  <div class="from-group">
-    <label>Mileage</label>
-    <div class="input-group">
+  <br>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">Mileage</label>
+    <div class="col-sm-4 input-group px-0">
       <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="carService.selectedCar.mileage" placeholder="Mileage" required>
       <div class="input-group-append">
-        <span class="input-group-text">KM</span>
+        <span class="input-group-text">km</span>
       </div>
     </div>
   </div>
-  <div class="from-group">
-    <label>Price</label>
-    <div class="input-group">
+  <br>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">EngineType</label>
+    <input class="col-sm-4 form-control" name="engineType" #engineType="ngModel" [(ngModel)]="carService.selectedCar.engineType" placeholder="EngineType" required>
+  </div>
+  <br>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">Capacity</label>
+    <div class="col-sm-4 input-group px-0">
+      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="carService.selectedCar.engine" placeholder="Engine" required>
+      <div class="input-group-append">
+        <span class="input-group-text">l</span>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="from-group row">
+    <label class="col-sm-2 col-form-label">Price</label>
+    <div class="col-sm-4 input-group px-0">
       <input class="form-control" name="price" #price="ngModel" [(ngModel)]="carService.selectedCar.price" placeholder="Price" required>
       <div class="input-group-append">
         <span class="input-group-text">$</span>
@@ -49,7 +60,7 @@
   <!--</div>-->
   <div class="form-group">
     <br>
-    <button class="btn btn-success" type="submit" [disabled]="!carForm.valid">Submit</button>
+    <button class="btn btn-success mr-2" type="submit" [disabled]="!carForm.valid">Submit</button>
     <button class="btn btn-danger" type="button" (click)="onResetForm(carForm)">Reset</button>
   </div>
 </form>
