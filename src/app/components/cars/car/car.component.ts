@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CarService } from '../shared/car.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { Car } from '../shared/car.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-car',
@@ -9,12 +11,15 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
-
-  constructor(private carService: CarService, private toastr: ToastrService) { }
+  constructor(private carService: CarService, private toastr: ToastrService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.carService.getData();
-    this.onResetForm();
+    this.route.queryParams.subscribe(params => {
+      if (!params['isEdit']) {
+        this.onResetForm();
+      }
+    });
   }
 
   onSubmit(carForm: NgForm) {
@@ -28,18 +33,21 @@ export class CarComponent implements OnInit {
   }
 
   onResetForm(carForm?: NgForm) {
-    if (carForm != null) carForm.reset();
-    this.carService.selectedCar = {
-      $key: null,
-      name: '',
-      model: '',
-      year: 2000,
-      engine: 0.0,
-      engineType: '',
-      mileage: 10000,
-      price: 10000
-      // ,
-      // options: []
-    };
+    if (carForm != null) {
+      carForm.reset();
+    }
+    this.carService.selectedCar = new Car();
+    // this.carService.selectedCar = {
+    //   $key: null,
+    //   name: '',
+    //   model: '',
+    //   year: 2000,
+    //   engine: 0.0,
+    //   engineType: '',
+    //   mileage: 10000,
+    //   price: 10000
+    //   // ,
+    //   // options: []
+    // };
   }
 }

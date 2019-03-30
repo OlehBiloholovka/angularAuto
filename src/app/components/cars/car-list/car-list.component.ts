@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CarService  } from '../shared/car.service';
 import { Car } from '../shared/car.model';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-car-list',
@@ -11,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 export class CarListComponent implements OnInit {
   carList: Car[];
 
-  constructor(private carService: CarService, private toastr: ToastrService) { }
+  constructor(private carService: CarService, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit() {
     const data = this.carService.getData();
@@ -27,6 +28,7 @@ export class CarListComponent implements OnInit {
 
   onEdit(car: Car) {
     this.carService.selectedCar = Object.assign({}, car);
+    this.router.navigate(['/car'], {queryParams: {isEdit: true}});
   }
 
   onDelete(key: string) {
