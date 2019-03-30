@@ -1,15 +1,35 @@
-<h6 class="text-center">
-  Car Register
-</h6><br>
-<table class="table table-sm table-hover">
-  <tr *ngFor="let car of carList">
-    <td>{{car.name}}</td>
-    <td>{{car.model}}</td>
-    <td>{{car.year}}</td>
-    <td>{{car.price}}</td>
-    <td>
-      <button class="btn btn-sm btn-success mr-2" (click)="onEdit(car)">edit</button>
-      <button class="btn btn-sm btn-danger" (click)="onDelete(car.$key)">delete</button>
-    </td>
-  </tr>
-</table>
+<div class="album py-5">
+  <div class="container">
+    <div class="row">
+
+      <div class="col-md-4" *ngFor="let car of carList">
+        <div class="card mb-4 shadow-sm">
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: Thumbnail"><title>Placeholder</title><rect fill="#55595c" width="100%" height="100%"></rect><text fill="#eceeef" dy=".3em" x="50%" y="50%">Thumbnail</text></svg>
+          <div class="card-body">
+            <h5 class="card-text font-weight-bold ">{{car.name}}
+              <span class="font-weight-normal">
+                {{car.model}}
+              </span>
+            </h5>
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <small class="font-weight-light font-italic">
+                  {{car.engine}} {{car.engineType}}
+                </small>
+                <small class="badge badge-primary text-wrap">{{car.year}}</small>
+                <br>
+                <p class="text-muted">{{car.mileage}} km</p>
+              </div>
+              <h3 class="text-success">$ {{car.price}}</h3>
+            </div>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-success" (click)="onEdit(car)">edit</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="onDelete(car.$key)">delete</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

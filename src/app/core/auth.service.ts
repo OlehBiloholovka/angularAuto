@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {User} from 'firebase';
-import {AngularFireAuth} from '@angular/fire/auth';
-import {Router} from '@angular/router';
+import { User } from 'firebase';
+import { auth } from 'firebase/app';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,16 @@ export class AuthService {
     await this.afAuth.auth.signOut();
     localStorage.removeItem('user');
     this.router.navigate(['/login']);
+  }
+
+  async  loginWithGoogle() {
+    await  this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+    this.router.navigate(['/cars']);
+  }
+
+  async  loginWithFacebook() {
+    await  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
+    this.router.navigate(['/cars']);
   }
 
   get isLoggedIn(): boolean {
