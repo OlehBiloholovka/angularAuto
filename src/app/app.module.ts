@@ -18,7 +18,7 @@ import { UserProfileComponent } from './components/users/user-profile/user-profi
 import {AuthService} from './core/auth.service';
 
 const appRoutes: Routes = [
-  {path: '', component: CarsComponent},
+  {path: 'old', component: CarsComponent},
   {path: 'cars', component: CarListComponent},
   {path: 'car', component: CarComponent},
   {path: 'login', component: UserLoginComponent}
