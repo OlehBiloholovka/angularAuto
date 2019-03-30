@@ -11,7 +11,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
-  constructor(private carService: CarService, private toastr: ToastrService, private route: ActivatedRoute) { }
+  constructor(private carService: CarService, private toastr: ToastrService, private route: ActivatedRoute) {
+    this.carService = carService;
+  }
 
   ngOnInit() {
     this.carService.getData();
@@ -49,5 +51,8 @@ export class CarComponent implements OnInit {
     //   // ,
     //   // options: []
     // };
+  }
+  onGetSelectedCar() {
+    return this.carService.selectedCar;
   }
 }

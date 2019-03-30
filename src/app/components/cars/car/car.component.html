@@ -1,19 +1,19 @@
 <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" >
-  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="carService.selectedCar.$key" >
+  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().$key" >
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">Brand</label>
-    <input class="col-sm-4 form-control" name="name" #name="ngModel" [(ngModel)]="carService.selectedCar.name" placeholder="Name" required>
+    <input class="col-sm-4 form-control" name="name" #name="ngModel" [(ngModel)]="onGetSelectedCar().name" placeholder="Name" required>
   </div>
   <br>
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">Model</label>
-    <input class="col-sm-4 form-control" name="model" #model="ngModel" [(ngModel)]="carService.selectedCar.model" placeholder="Model" required>
+    <input class="col-sm-4 form-control" name="model" #model="ngModel" [(ngModel)]="onGetSelectedCar().model" placeholder="Model" required>
   </div>
   <br>
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">First Registration</label>
     <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="year" #year="ngModel" [(ngModel)]="carService.selectedCar.year" placeholder="Year" required>
+      <input class="form-control" name="year" #year="ngModel" [(ngModel)]="onGetSelectedCar().year" placeholder="Year" required>
       <div class="input-group-append">
         <span class="input-group-text">year</span>
       </div>
@@ -23,7 +23,7 @@
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">Mileage</label>
     <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="carService.selectedCar.mileage" placeholder="Mileage" required>
+      <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="onGetSelectedCar().mileage" placeholder="Mileage" required>
       <div class="input-group-append">
         <span class="input-group-text">km</span>
       </div>
@@ -32,13 +32,13 @@
   <br>
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">EngineType</label>
-    <input class="col-sm-4 form-control" name="engineType" #engineType="ngModel" [(ngModel)]="carService.selectedCar.engineType" placeholder="EngineType" required>
+    <input class="col-sm-4 form-control" name="engineType" #engineType="ngModel" [(ngModel)]="onGetSelectedCar().engineType" placeholder="EngineType" required>
   </div>
   <br>
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">Capacity</label>
     <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="carService.selectedCar.engine" placeholder="Engine" required>
+      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="onGetSelectedCar().engine" placeholder="Engine" required>
       <div class="input-group-append">
         <span class="input-group-text">l</span>
       </div>
@@ -48,7 +48,7 @@
   <div class="from-group row">
     <label class="col-sm-2 col-form-label">Price</label>
     <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="price" #price="ngModel" [(ngModel)]="carService.selectedCar.price" placeholder="Price" required>
+      <input class="form-control" name="price" #price="ngModel" [(ngModel)]="onGetSelectedCar().price" placeholder="Price" required>
       <div class="input-group-append">
         <span class="input-group-text">$</span>
       </div>

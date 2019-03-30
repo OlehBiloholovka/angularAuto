@@ -8,9 +8,9 @@
     </a>
   </nav>
   <a class="btn btn-outline-primary" href="#"
-     *ngIf="!authService.isLoggedIn"
+     *ngIf="!isLoggedIn"
      routerLink="/login">Sign up</a>
   <a class="btn btn-outline-danger" href="#"
-     *ngIf="authService.isLoggedIn"
-     (click)="authService.logout()">Logout</a>
+     *ngIf="isLoggedIn"
+     (click)="onLogout()">Logout</a>
 </div>

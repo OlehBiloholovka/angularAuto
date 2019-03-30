@@ -13,4 +13,17 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() {
   }
 
+
+  onLogin(email: string, password: string) {
+    this.authService.login(email, password);
+  }
+
+
+  onLoginWithGoogle() {
+    this.authService.loginWithGoogle();
+  }
+
+  onLoginWithFacebook() {
+    this.authService.loginWithFacebook();
+  }
 }
