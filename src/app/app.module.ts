@@ -16,6 +16,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserLoginComponent } from './components/users/user-login/user-login.component';
 import { UserProfileComponent } from './components/users/user-profile/user-profile.component';
 import {AuthService} from './core/auth.service';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: 'old', component: CarsComponent},
@@ -40,8 +41,9 @@ const appRoutes: Routes = [
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     FormsModule,
+    HttpClientModule,
     ToastrModule.forRoot(),
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [
     AuthService,

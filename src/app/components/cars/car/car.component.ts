@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Car } from '../shared/car.model';
 import { ActivatedRoute } from '@angular/router';
+import {HttpClient} from '@angular/common/http';
+import {headersToString} from 'selenium-webdriver/http';
 
 @Component({
   selector: 'app-car',
@@ -11,7 +13,7 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
-  constructor(private carService: CarService, private toastr: ToastrService, private route: ActivatedRoute) { }
+  constructor(private carService: CarService, private toastr: ToastrService, private route: ActivatedRoute, private http: HttpClient) { }
 
   ngOnInit() {
     this.carService.getData();
@@ -50,4 +52,12 @@ export class CarComponent implements OnInit {
     //   // options: []
     // };
   }
+
+  onGetCarMakes() {
+    const headers = new Headers({ 'X-AS24-Version': '1.1', 'Accept-Language': 'en-GB' });
+    const https = this.http.get('https://api.autoscout24.com/makes', headers);
+    // console.log(https.pipe);
+    // this.http.get(headersToString('X-AS24-Version: 1.1', 'Accept-Language: en-GB'), );
+  }
+
 }
