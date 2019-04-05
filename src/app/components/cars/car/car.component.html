@@ -2,11 +2,11 @@
 <br>
 <br>
 <div class="col-6 px-0">
-  <div *ngIf="carService.uploadPercent | async" class="progress" >
+  <div *ngIf="onGetUploadPercent() | async" class="progress" >
     <div class="progress-bar progress-bar-striped progress-bar-animated"
          role="progressbar"
-         [ngStyle]="{ 'width': (carService.uploadPercent | async) + '%'}"
-         >{{ (carService.uploadPercent | async) | number }} %</div>
+         [ngStyle]="{ 'width': (onGetUploadPercent() | async) + '%'}"
+         >{{ (onGetUploadPercent() | async) | number }} %</div>
     <!--  <div class="progress-bar progress-bar-striped progress-bar-animated"-->
     <!--       role="progressbar"-->
     <!--       aria-valuenow="{{ carService.uploadPercent | async }}"-->

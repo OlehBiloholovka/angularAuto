@@ -75,7 +75,7 @@ export class CarComponent implements OnInit {
   //   return this.carService.photoURL;
   // }
   //
-  // onGetUploadPercent() {
-  //   return this.carService.uploadPercent;
-  // }
+  onGetUploadPercent() {
+    return this.carService.uploadPercent;
+  }
 }
