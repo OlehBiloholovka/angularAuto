@@ -7,5 +7,7 @@ export class Car {
   engineType: string;
   mileage: number;
   price: number;
+  userID: string;
+  photoURLs: string[] = [];
   // options: string[];
 }

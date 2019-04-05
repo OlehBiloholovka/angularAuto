@@ -3,6 +3,7 @@ import { CarService  } from '../shared/car.service';
 import { Car } from '../shared/car.model';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import {AuthService} from '../../../core/auth.service';
 
 @Component({
   selector: 'app-car-list',
@@ -12,15 +13,18 @@ import { Router } from '@angular/router';
 export class CarListComponent implements OnInit {
   carList: Car[];
 
-  constructor(private carService: CarService, private toastr: ToastrService, private router: Router) { }
+  constructor(private carService: CarService,
+              private toastr: ToastrService,
+              private router: Router,
+              private authServise: AuthService) { }
 
   ngOnInit() {
     const data = this.carService.getData();
     data.snapshotChanges().subscribe(item => {
       this.carList = [];
       item.forEach(element => {
-        let e = element.payload.toJSON();
-        e['$key'] = element.key;
+        const e = element.payload.toJSON();
+        (e as Car).$key = element.key;
         this.carList.push(e as Car);
       });
     });
@@ -36,5 +40,9 @@ export class CarListComponent implements OnInit {
       this.carService.deleteCar(key);
       this.toastr.warning('Deleted Successfully', 'Car register');
     }
+  }
+
+  isUserCar(userID: string) {
+    return  userID === this.authServise.user.uid;
   }
 }

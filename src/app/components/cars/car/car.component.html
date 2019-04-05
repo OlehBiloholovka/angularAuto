@@ -1,19 +1,52 @@
-<form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" >
+<input type="file" (change)="onPhotoUpload($event)" accept="image/*" />
+<br>
+<br>
+<div class="col-6 px-0">
+  <div *ngIf="carService.uploadPercent | async" class="progress" >
+    <div class="progress-bar progress-bar-striped progress-bar-animated"
+         role="progressbar"
+         [ngStyle]="{ 'width': (carService.uploadPercent | async) + '%'}"
+         >{{ (carService.uploadPercent | async) | number }} %</div>
+    <!--  <div class="progress-bar progress-bar-striped progress-bar-animated"-->
+    <!--       role="progressbar"-->
+    <!--       aria-valuenow="{{ carService.uploadPercent | async }}"-->
+    <!--       aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>-->
+
+  </div>
+  <img *ngIf="onGetSelectedCar().$key" [src]="onGetSelectedCar()?.photoURLs[0]" width="100%" alt="carPhoto"><br>
+</div>
+
+
+<!--<a [href]="carService.photoURL | async">{{ carService.photoURL | async }}</a>-->
+<!--<br>-->
+<!--<img width="400px" src="{{ carService.photoURL | async }}" alt="carPhoto">-->
+<!--<br>-->
+<!--<div class="media">-->
+<!--  <img *ngIf="carService.selectedCar.photoURLs.length > 0" src="{{ carService.selectedCar.photoURLs[0] }}" class="img-thumbnail" width="450" alt="carPhoto">-->
+<!--  <div class="media-body">-->
+<!--&lt;!&ndash;    <h5 class="mt-0">Media heading</h5>&ndash;&gt;-->
+<!--&lt;!&ndash;    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.&ndash;&gt;-->
+<!--  </div>-->
+<!--</div>-->
+<br>
+<form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" class="form-group">
   <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().$key" >
+  <input type="hidden" class="form-control" name="photoURLs" #photoURLs="ngModel" [(ngModel)]="onGetSelectedCar().photoURLs" >
+  <input type="hidden" class="form-control" name="userID" #userID="ngModel" [(ngModel)]="onGetSelectedCar().userID" >
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">Brand</label>
-    <input class="col-sm-4 form-control" name="name" #name="ngModel" [(ngModel)]="onGetSelectedCar().name" placeholder="Name" required>
+    <label class="col-2 col-sm-2 col-form-label" for="name">Brand</label>
+    <input id="name" class="col-4 col-sm-4 form-control" name="name" #name="ngModel" [(ngModel)]="onGetSelectedCar().name" placeholder="Name" required>
   </div>
   <br>
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">Model</label>
-    <input class="col-sm-4 form-control" name="model" #model="ngModel" [(ngModel)]="onGetSelectedCar().model" placeholder="Model" required>
+    <label for="model" class="col-2 col-sm-2 col-form-label">Model</label>
+    <input id="model" class="col-4 col-sm-4 form-control" name="model" #model="ngModel" [(ngModel)]="onGetSelectedCar().model" placeholder="Model" required>
   </div>
   <br>
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">First Registration</label>
-    <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="year" #year="ngModel" [(ngModel)]="onGetSelectedCar().year" placeholder="Year" required>
+    <label for="year" class="col-2 col-sm-2 col-form-label">First Registration</label>
+    <div class="col-4 col-sm-4 input-group px-0">
+      <input id="year" class="form-control" name="year" #year="ngModel" [(ngModel)]="onGetSelectedCar().year" placeholder="Year" required>
       <div class="input-group-append">
         <span class="input-group-text">year</span>
       </div>
@@ -21,9 +54,9 @@
   </div>
   <br>
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">Mileage</label>
-    <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="onGetSelectedCar().mileage" placeholder="Mileage" required>
+    <label for="mileage" class="col-2 col-sm-2 col-form-label">Mileage</label>
+    <div class="col-4 col-sm-4 input-group px-0">
+      <input id="mileage" class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="onGetSelectedCar().mileage" placeholder="Mileage" required>
       <div class="input-group-append">
         <span class="input-group-text">km</span>
       </div>
@@ -31,14 +64,14 @@
   </div>
   <br>
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">EngineType</label>
-    <input class="col-sm-4 form-control" name="engineType" #engineType="ngModel" [(ngModel)]="onGetSelectedCar().engineType" placeholder="EngineType" required>
+    <label for="engineType" class="col-2 col-sm-2 col-form-label">EngineType</label>
+    <input id="engineType" class="col-4 col-sm-4 form-control" name="engineType" #engineType="ngModel" [(ngModel)]="onGetSelectedCar().engineType" placeholder="EngineType" required>
   </div>
   <br>
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">Capacity</label>
-    <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="engine" #engine="ngModel" [(ngModel)]="onGetSelectedCar().engine" placeholder="Engine" required>
+    <label for="engine" class="col-2 col-sm-2 col-form-label">Capacity</label>
+    <div class="col-4 col-sm-4 input-group px-0">
+      <input id="engine" class="form-control" name="engine" #engine="ngModel" [(ngModel)]="onGetSelectedCar().engine" placeholder="Engine" required>
       <div class="input-group-append">
         <span class="input-group-text">l</span>
       </div>
@@ -46,9 +79,9 @@
   </div>
   <br>
   <div class="from-group row">
-    <label class="col-sm-2 col-form-label">Price</label>
-    <div class="col-sm-4 input-group px-0">
-      <input class="form-control" name="price" #price="ngModel" [(ngModel)]="onGetSelectedCar().price" placeholder="Price" required>
+    <label for="price" class="col-2 col-sm-2 col-form-label">Price</label>
+    <div class="col-4 col-sm-4 input-group px-0">
+      <input id="price" class="form-control" name="price" #price="ngModel" [(ngModel)]="onGetSelectedCar().price" placeholder="Price" required>
       <div class="input-group-append">
         <span class="input-group-text">$</span>
       </div>

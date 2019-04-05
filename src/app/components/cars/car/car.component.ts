@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Car } from '../shared/car.model';
 import { ActivatedRoute } from '@angular/router';
+import {AuthService} from '../../../core/auth.service';
 
 @Component({
   selector: 'app-car',
@@ -11,24 +12,38 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
-  constructor(private carService: CarService, private toastr: ToastrService, private route: ActivatedRoute) {
+  constructor(private carService: CarService,
+              private toastr: ToastrService,
+              private route: ActivatedRoute,
+              private authService: AuthService) {
     this.carService = carService;
+    this.authService = authService;
   }
 
   ngOnInit() {
     this.carService.getData();
     this.route.queryParams.subscribe(params => {
-      if (!params['isEdit']) {
+      if (!params.isEdit) {
         this.onResetForm();
       }
     });
   }
 
+  onPhotoUpload(event) {
+    this.carService.uploadPhoto(event);
+  }
+
   onSubmit(carForm: NgForm) {
     if (carForm.value.$key == null) {
-      this.carService.insertCar(carForm.value);
+      // const car: Car = Object.assign({}, carForm.value);
+      // carForm.value.userID = this.authService.user.uid;
+      // const car: Car = carForm.value;
+      this.carService.selectedCar.userID = this.authService.user.uid;
+      // this.carService.photoURL.pipe().subscribe(url => this.carService.selectedCar.photoURLs.push(url));
+      // car.photoURLs.push(this.carService.photoURL.pipe(finalize()));
+      this.carService.insertCar(this.carService.selectedCar);
     } else {
-      this.carService.updateCar(carForm.value);
+      this.carService.updateCar(this.carService.selectedCar);
     }
     this.onResetForm(carForm);
     this.toastr.success('Submitted Successfully', 'Car Register');
@@ -55,4 +70,12 @@ export class CarComponent implements OnInit {
   onGetSelectedCar() {
     return this.carService.selectedCar;
   }
+
+  // onGetUploadURL() {
+  //   return this.carService.photoURL;
+  // }
+  //
+  // onGetUploadPercent() {
+  //   return this.carService.uploadPercent;
+  // }
 }

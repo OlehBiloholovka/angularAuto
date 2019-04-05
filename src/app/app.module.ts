@@ -16,6 +16,8 @@ import { HeaderComponent } from './components/header/header.component';
 import { UserLoginComponent } from './components/users/user-login/user-login.component';
 import { UserProfileComponent } from './components/users/user-profile/user-profile.component';
 import {AuthService} from './core/auth.service';
+import { AngularFireStorageModule} from '@angular/fire/storage';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
   {path: 'old', component: CarsComponent},
@@ -37,8 +39,10 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    BrowserAnimationsModule,
     AngularFireDatabaseModule,
     AngularFireAuthModule,
+    AngularFireStorageModule,
     FormsModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot(appRoutes)
