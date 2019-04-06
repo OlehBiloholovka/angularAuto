@@ -35,13 +35,13 @@ export class CarComponent implements OnInit {
   }
 
   onSubmit(carForm: NgForm) {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/login']);
+    }
     if (carForm.value.$key == null) {
       // const car: Car = Object.assign({}, carForm.value);
       // carForm.value.userID = this.authService.user.uid;
       // const car: Car = carForm.value;
-      if (!this.authService.isLoggedIn) {
-        this.router.navigate(['/login']);
-      }
       this.carService.selectedCar.userID = this.authService.user.uid;
       // this.carService.photoURL.pipe().subscribe(url => this.carService.selectedCar.photoURLs.push(url));
       // car.photoURLs.push(this.carService.photoURL.pipe(finalize()));
