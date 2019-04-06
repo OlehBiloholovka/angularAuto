@@ -22,6 +22,9 @@ export class CarComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/login']);
+    }
     this.carService.getData();
     this.route.queryParams.subscribe(params => {
       if (!params.isEdit) {
@@ -35,9 +38,6 @@ export class CarComponent implements OnInit {
   }
 
   onSubmit(carForm: NgForm) {
-    if (!this.authService.isLoggedIn) {
-      this.router.navigate(['/login']);
-    }
     if (carForm.value.$key == null) {
       // const car: Car = Object.assign({}, carForm.value);
       // carForm.value.userID = this.authService.user.uid;
