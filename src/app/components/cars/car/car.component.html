@@ -13,7 +13,8 @@
     <!--       aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>-->
 
   </div>
-  <img *ngIf="onGetSelectedCar().$key" [src]="onGetSelectedCar()?.photoURLs[0]" width="100%" alt="carPhoto"><br>
+<!--  <div>{{onGetSelectedCar().photoURLs[0]}}</div>-->
+  <img *ngIf="onGetUploadURL()" [src]="onGetSelectedCar()?.photoURLs[0]" width="100%" alt="carPhoto"><br>
 </div>
 
 

@@ -3,7 +3,7 @@ import { CarService } from '../shared/car.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Car } from '../shared/car.model';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../core/auth.service';
 
 @Component({
@@ -15,6 +15,7 @@ export class CarComponent implements OnInit {
   constructor(private carService: CarService,
               private toastr: ToastrService,
               private route: ActivatedRoute,
+              private router: Router,
               private authService: AuthService) {
     this.carService = carService;
     this.authService = authService;
@@ -38,6 +39,9 @@ export class CarComponent implements OnInit {
       // const car: Car = Object.assign({}, carForm.value);
       // carForm.value.userID = this.authService.user.uid;
       // const car: Car = carForm.value;
+      if (!this.authService.isLoggedIn) {
+        this.router.navigate(['/login']);
+      }
       this.carService.selectedCar.userID = this.authService.user.uid;
       // this.carService.photoURL.pipe().subscribe(url => this.carService.selectedCar.photoURLs.push(url));
       // car.photoURLs.push(this.carService.photoURL.pipe(finalize()));
@@ -71,10 +75,10 @@ export class CarComponent implements OnInit {
     return this.carService.selectedCar;
   }
 
-  // onGetUploadURL() {
-  //   return this.carService.photoURL;
-  // }
-  //
+  onGetUploadURL() {
+    return this.carService.photoURLs;
+  }
+
   onGetUploadPercent() {
     return this.carService.uploadPercent;
   }
