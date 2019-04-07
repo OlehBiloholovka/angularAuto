@@ -16,7 +16,7 @@ export class CarListComponent implements OnInit {
   constructor(private carService: CarService,
               private toastr: ToastrService,
               private router: Router,
-              private authServise: AuthService) { }
+              private authService: AuthService) { }
 
   ngOnInit() {
     const data = this.carService.getData();
@@ -43,6 +43,9 @@ export class CarListComponent implements OnInit {
   }
 
   isUserCar(userID: string) {
-    return  userID === this.authServise.user.uid;
+    if (this.authService.isLoggedIn) {
+      return  userID === this.authService.user.uid ;
+    }
+    return false;
   }
 }
