@@ -1,34 +1,15 @@
-<input type="file" (change)="onPhotoUpload($event)" accept="image/*" />
+<input #photoInput type="file" (change)="onPhotoUpload($event)" accept="image/*" />
 <br>
 <br>
 <div class="col-6 px-0">
-  <div *ngIf="onGetUploadPercent() | async" class="progress" >
+  <div *ngIf="onGetUploadPercent()" class="progress" >
     <div class="progress-bar progress-bar-striped progress-bar-animated"
          role="progressbar"
          [ngStyle]="{ 'width': (onGetUploadPercent() | async) + '%'}"
-         >{{ (onGetUploadPercent() | async) | number }} %</div>
-    <!--  <div class="progress-bar progress-bar-striped progress-bar-animated"-->
-    <!--       role="progressbar"-->
-    <!--       aria-valuenow="{{ carService.uploadPercent | async }}"-->
-    <!--       aria-valuemin="0" aria-valuemax="100" style="width: 75%"></div>-->
-
+    >{{ (onGetUploadPercent() | async) | number }} %</div>
   </div>
-<!--  <div>{{onGetSelectedCar().photoURLs[0]}}</div>-->
-  <img *ngIf="onGetUploadURL()" [src]="onGetSelectedCar()?.photoURLs[0]" width="100%" alt="carPhoto"><br>
+  <img *ngIf="onGetUploadURL()" src="{{onGetUploadURL() | async}}" width="100%" alt="carPhoto"><br>
 </div>
-
-
-<!--<a [href]="carService.photoURL | async">{{ carService.photoURL | async }}</a>-->
-<!--<br>-->
-<!--<img width="400px" src="{{ carService.photoURL | async }}" alt="carPhoto">-->
-<!--<br>-->
-<!--<div class="media">-->
-<!--  <img *ngIf="carService.selectedCar.photoURLs.length > 0" src="{{ carService.selectedCar.photoURLs[0] }}" class="img-thumbnail" width="450" alt="carPhoto">-->
-<!--  <div class="media-body">-->
-<!--&lt;!&ndash;    <h5 class="mt-0">Media heading</h5>&ndash;&gt;-->
-<!--&lt;!&ndash;    Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.&ndash;&gt;-->
-<!--  </div>-->
-<!--</div>-->
 <br>
 <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" class="form-group">
   <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().$key" >

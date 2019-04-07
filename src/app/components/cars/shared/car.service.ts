@@ -13,7 +13,7 @@ export class CarService {
   carList: AngularFireList<any>;
   selectedCar: Car = new Car();
   uploadPercent: Observable<number>;
-  photoURLs: Observable<string>;
+  photoUrl: Observable<string | null>;
 
   constructor(private firebase: AngularFireDatabase, private storage: AngularFireStorage, private authService: AuthService) { }
 
@@ -67,9 +67,7 @@ export class CarService {
 
     task.snapshotChanges().pipe(
       finalize(() => {
-        // this.photoURL = fileRef.getDownloadURL();
-        // this.selectedCar.photoURLs.push(fileRef.getDownloadURL().toString());
-        this.photoURLs = fileRef.getDownloadURL();
+        this.photoUrl = fileRef.getDownloadURL();
 
         fileRef.getDownloadURL().subscribe((url) => {
           if (this.selectedCar.photoURLs === undefined) {

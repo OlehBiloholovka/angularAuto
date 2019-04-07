@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import { CarService } from '../shared/car.service';
 import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
@@ -12,6 +12,8 @@ import {AuthService} from '../../../core/auth.service';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
+  @ViewChild('photoInput')
+  photoInput: ElementRef;
   constructor(private carService: CarService,
               private toastr: ToastrService,
               private route: ActivatedRoute,
@@ -39,12 +41,7 @@ export class CarComponent implements OnInit {
 
   onSubmit(carForm: NgForm) {
     if (carForm.value.$key == null) {
-      // const car: Car = Object.assign({}, carForm.value);
-      // carForm.value.userID = this.authService.user.uid;
-      // const car: Car = carForm.value;
       this.carService.selectedCar.userID = this.authService.user.uid;
-      // this.carService.photoURL.pipe().subscribe(url => this.carService.selectedCar.photoURLs.push(url));
-      // car.photoURLs.push(this.carService.photoURL.pipe(finalize()));
       this.carService.insertCar(this.carService.selectedCar);
     } else {
       this.carService.updateCar(this.carService.selectedCar);
@@ -57,26 +54,19 @@ export class CarComponent implements OnInit {
     if (carForm != null) {
       carForm.reset();
     }
+
+    this.photoInput.nativeElement.value = '';
+    this.carService.uploadPercent = undefined;
+    this.carService.photoUrl = undefined;
+
     this.carService.selectedCar = new Car();
-    // this.carService.selectedCar = {
-    //   $key: null,
-    //   name: '',
-    //   model: '',
-    //   year: 2000,
-    //   engine: 0.0,
-    //   engineType: '',
-    //   mileage: 10000,
-    //   price: 10000
-    //   // ,
-    //   // options: []
-    // };
   }
   onGetSelectedCar() {
     return this.carService.selectedCar;
   }
 
   onGetUploadURL() {
-    return this.carService.photoURLs;
+    return this.carService.photoUrl;
   }
 
   onGetUploadPercent() {
