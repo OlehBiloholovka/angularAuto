@@ -18,6 +18,8 @@ import { UserProfileComponent } from './components/users/user-profile/user-profi
 import {AuthService} from './core/auth.service';
 import { AngularFireStorageModule} from '@angular/fire/storage';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { CarFormComponent } from './components/cars/car-form/car-form.component';
+import {HttpClientModule} from '@angular/common/http';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/cars', pathMatch: 'full'},
@@ -25,7 +27,8 @@ const appRoutes: Routes = [
   {path: 'cars', component: CarListComponent},
   {path: 'cars/:id', component: CarListComponent},
   {path: 'car', component: CarComponent},
-  {path: 'login', component: UserLoginComponent}
+  {path: 'login', component: UserLoginComponent},
+  {path: 'car-form', component: CarFormComponent}
 ];
 
 @NgModule({
@@ -36,10 +39,12 @@ const appRoutes: Routes = [
     CarListComponent,
     HeaderComponent,
     UserLoginComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    CarFormComponent
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     BrowserAnimationsModule,
     AngularFireDatabaseModule,
