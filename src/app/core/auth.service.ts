@@ -14,8 +14,10 @@ export class AuthService {
       if (user) {
         this.user = user;
         localStorage.setItem('user', JSON.stringify(this.user));
+        localStorage.setItem('userID', this.user.uid);
       } else {
         localStorage.setItem('user', null);
+        localStorage.removeItem('userID');
       }
     });
   }
@@ -48,5 +50,9 @@ export class AuthService {
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
     return user !== null;
+  }
+
+  getUserID(): string {
+    return this.user.uid;
   }
 }

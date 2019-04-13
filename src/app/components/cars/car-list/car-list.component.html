@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-md-4" *ngFor="let car of carList">
+      <div class="col-md-4" *ngFor="let car of carList | async">
         <div class="card mb-4 shadow-sm">
           <img *ngIf="car.photoURLs" [src]="car.photoURLs[0]" height="auto" width="100%" alt="carPhoto">
           <div *ngIf="!car.photoURLs">
@@ -26,7 +26,7 @@
               </div>
               <h3 class="text-success">$ {{car.price}}</h3>
             </div>
-            <div class="btn-group" *ngIf="isUserCar(car.userID)">
+            <div class="btn-group" *ngIf="id && isUserCar(car.userID)">
               <button type="button" class="btn btn-sm btn-outline-success" (click)="onEdit(car)">edit</button>
               <button type="button" class="btn btn-sm btn-outline-danger" (click)="onDelete(car.$key)">delete</button>
             </div>

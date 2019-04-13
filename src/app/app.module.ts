@@ -20,8 +20,10 @@ import { AngularFireStorageModule} from '@angular/fire/storage';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 const appRoutes: Routes = [
+  {path: '', redirectTo: '/cars', pathMatch: 'full'},
   {path: 'old', component: CarsComponent},
   {path: 'cars', component: CarListComponent},
+  {path: 'cars/:id', component: CarListComponent},
   {path: 'car', component: CarComponent},
   {path: 'login', component: UserLoginComponent}
 ];

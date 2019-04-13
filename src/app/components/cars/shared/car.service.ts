@@ -1,65 +1,77 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireList } from '@angular/fire/database';
+import {AngularFireDatabase, AngularFireList, AngularFireObject} from '@angular/fire/database';
 import { Car } from './car.model';
 import {finalize} from 'rxjs/operators';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {Observable} from 'rxjs';
-import {AuthService} from '../../../core/auth.service';
+import {AngularFireAuth} from '@angular/fire/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CarService {
-  carList: AngularFireList<any>;
+
+
+  constructor(private db: AngularFireDatabase, private storage: AngularFireStorage, public afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.userID = user.uid;
+      }
+    });
+  }
+  carList: AngularFireList<Car>;
   selectedCar: Car = new Car();
   uploadPercent: Observable<number>;
   photoUrl: Observable<string | null>;
 
-  constructor(private firebase: AngularFireDatabase, private storage: AngularFireStorage, private authService: AuthService) { }
+  private basePath = '/cars';
 
-  getData() {
-    this.carList = this.firebase.list('cars');
+  car: AngularFireObject<Car> = null;
+  userID: string;
+
+  private static handleError(error: any) {
+    console.log(error);
+  }
+
+  getAllCars(): AngularFireList<Car> {
+    this.carList = this.db.list<Car>(this.basePath);
     return this.carList;
   }
 
-  insertCar(car: Car) {
-    this.carList.push({
-      userID: car.userID,
-      name: car.name,
-      model: car.model,
-      year: car.year,
-      engine: car.engine,
-      engineType: car.engineType,
-      mileage: car.mileage,
-      price: car.price,
-      photoURLs: car.photoURLs
-      // options: car.options
-    });
+  getCarsByUserID(userID: string): AngularFireList<Car> {
+    return this.db.list<Car>(this.basePath, ref => ref.orderByChild('userID').equalTo(userID));
   }
 
-  updateCar(car: Car) {
-     this.carList.update(car.$key,
-       {
-         userID: car.userID,
-         name: car.name,
-         model: car.model,
-         year: car.year,
-         engine: car.engine,
-         engineType: car.engineType,
-         mileage: car.mileage,
-         price: car.price,
-         photoURLs: car.photoURLs
-         // options: car.options
-     });
+  getCar(key: string): AngularFireObject<Car> {
+    const itemPath = `${this.basePath}/${key}`;
+    this.car = this.db.object<Car>(itemPath);
+    return this.car;
   }
 
-  deleteCar($key: string) {
-    this.carList.remove($key);
+  createCar(car: Car): void {
+    car.userID = this.userID;
+    this.carList.push(car)
+      .catch(error => CarService.handleError(error));
+  }
+
+  updateCar(key: string, value: any): void {
+    this.carList.update(key, value)
+      .catch(error => CarService.handleError(error));
+  }
+
+  deleteCar(key: string): void {
+    this.carList.remove(key)
+      .catch(error => CarService.handleError(error));
+  }
+
+  deleteAll(): void {
+    this.carList.remove()
+      .catch(error => CarService.handleError(error));
   }
 
   uploadPhoto(event) {
     const file = event.target.files[0];
-    const filePath = 'temp/' + this.authService.user.uid + '/' + Date.now() + '.jpg';
+    const filePath = 'temp/' + this.userID + '/' + Date.now() + '.jpg';
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
 
