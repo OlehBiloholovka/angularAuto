@@ -20,6 +20,7 @@ import { AngularFireStorageModule} from '@angular/fire/storage';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { CarFormComponent } from './components/cars/car-form/car-form.component';
 import {HttpClientModule} from '@angular/common/http';
+import { CheckboxGroupComponent } from './components/checkbox-group/checkbox-group.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/cars', pathMatch: 'full'},
@@ -40,7 +41,8 @@ const appRoutes: Routes = [
     HeaderComponent,
     UserLoginComponent,
     UserProfileComponent,
-    CarFormComponent
+    CarFormComponent,
+    CheckboxGroupComponent
   ],
   imports: [
     BrowserModule,

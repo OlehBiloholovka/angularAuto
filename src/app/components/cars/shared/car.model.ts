@@ -9,5 +9,5 @@ export class Car {
   price: number;
   userID: string;
   photoURLs: string[] = [];
-  // options: string[];
+  options: any[] = [];
 }

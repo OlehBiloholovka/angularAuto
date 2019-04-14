@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
 import {MainParameter} from '../shared/auto-ria/main-parameter.model';
 import {Make} from '../shared/auto-ria/make.model';
@@ -7,6 +7,8 @@ import {Generation} from '../shared/auto-ria/generation.model';
 import {GenerationBodyStyle} from '../shared/auto-ria/generation-bodystyle.model';
 import {Modification} from '../shared/auto-ria/modification.model';
 import {Equip} from '../shared/auto-ria/equip.model';
+import {CheckboxItem} from '../../checkbox-group/shared/checkbox-item.model';
+import {Car} from '../shared/car.model';
 
 @Component({
   selector: 'app-car-form',
@@ -14,6 +16,10 @@ import {Equip} from '../shared/auto-ria/equip.model';
   styleUrls: ['./car-form.component.css']
 })
 export class CarFormComponent implements OnInit {
+  public currentCar: Car = new Car();
+// Form variables
+  carOptions = new Array<CheckboxItem>();
+
 // main params
   categories: MainParameter[];
   bodyStyles: MainParameter[];
@@ -107,6 +113,7 @@ export class CarFormComponent implements OnInit {
       .getOptions(this.selectedCategoryID)
       .subscribe(resp => {
         this.options = resp;
+        this.carOptions = resp.map(opt => new CheckboxItem(opt.value, opt.name));
       }, error => console.log(error));
   }
 
@@ -201,5 +208,10 @@ export class CarFormComponent implements OnInit {
 
   onChangeState() {
     this.getCities();
+  }
+
+  onOptionsChange(value) {
+    this.currentCar.options = value;
+    console.log('Car options:' , this.currentCar.options);
   }
 }
