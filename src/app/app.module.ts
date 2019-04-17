@@ -28,8 +28,6 @@ const appRoutes: Routes = [
   {path: '', redirectTo: '/cars', pathMatch: 'full'},
   {path: 'old', component: CarsComponent},
   {path: 'cars', component: CarListComponent},
-  {path: 'cars/:id', component: CarListComponent},
-  {path: 'car', component: CarComponent},
   {path: 'login', component: UserLoginComponent},
   {path: 'user', component: UserComponent, children: [
       {path: 'form', component: CarFormComponent},
