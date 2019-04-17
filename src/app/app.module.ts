@@ -34,7 +34,8 @@ const appRoutes: Routes = [
   {path: 'user', component: UserComponent, children: [
       {path: 'form', component: CarFormComponent},
       {path: 'cars/:id', component: CarListComponent},
-      {path: 'profile', component: UserProfileComponent}
+      {path: 'profile', component: UserProfileComponent},
+      {path: 'car', component: CarComponent}
     ]},
 
 ];

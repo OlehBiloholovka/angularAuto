@@ -2,10 +2,13 @@
   <div class="sidebar-sticky">
     <ul class="nav flex-column nav-pills">
       <li class="nav-item">
-        <a class="nav-link active" routerLink="form">My cars</a>
+        <a class="nav-link active" [routerLink]="['cars', getUserID()]">My cars</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['cars', getUserID()]">Edit car</a>
+        <a class="nav-link" routerLink="form">Edit car</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="car">Current car</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="profile">Profile</a>
