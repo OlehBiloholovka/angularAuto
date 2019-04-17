@@ -18,9 +18,11 @@ import { UserProfileComponent } from './components/users/user-profile/user-profi
 import {AuthService} from './core/auth.service';
 import { AngularFireStorageModule} from '@angular/fire/storage';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { CarFormComponent } from './components/cars/car-form/car-form.component';
+import { CarFormComponent } from './user/car-form/car-form.component';
 import {HttpClientModule} from '@angular/common/http';
 import { CheckboxGroupComponent } from './components/checkbox-group/checkbox-group.component';
+import { SidebarComponent } from './user/sidebar/sidebar.component';
+import { UserComponent } from './user/user.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/cars', pathMatch: 'full'},
@@ -29,7 +31,12 @@ const appRoutes: Routes = [
   {path: 'cars/:id', component: CarListComponent},
   {path: 'car', component: CarComponent},
   {path: 'login', component: UserLoginComponent},
-  {path: 'car-form', component: CarFormComponent}
+  {path: 'user', component: UserComponent, children: [
+      {path: 'form', component: CarFormComponent},
+      {path: 'cars/:id', component: CarListComponent},
+      {path: 'profile', component: UserProfileComponent}
+    ]},
+
 ];
 
 @NgModule({
@@ -42,7 +49,9 @@ const appRoutes: Routes = [
     UserLoginComponent,
     UserProfileComponent,
     CarFormComponent,
-    CheckboxGroupComponent
+    CheckboxGroupComponent,
+    SidebarComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,
