@@ -1,0 +1,15 @@
+<nav class="d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column nav-pills">
+      <li class="nav-item">
+        <a class="nav-link active" routerLink="form">My cars</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['cars', getUserID()]">Edit car</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="profile">Profile</a>
+      </li>
+    </ul>
+  </div>
+</nav>
