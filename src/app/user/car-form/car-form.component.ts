@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AutoRiaService} from '../../components/cars/shared/auto-ria/auto-ria.service';
 import {MainParameter} from '../../components/cars/shared/auto-ria/main-parameter.model';
 import {CheckboxItem} from '../../components/checkbox-group/shared/checkbox-item.model';
@@ -19,6 +19,8 @@ import {AuthService} from '../../core/auth.service';
   styleUrls: ['./car-form.component.css']
 })
 export class CarFormComponent implements OnInit {
+  @ViewChild('photoInput')
+  photoInput: ElementRef;
 
   constructor(private autoRiaService: AutoRiaService,
               private carService: CarService,
@@ -251,9 +253,9 @@ export class CarFormComponent implements OnInit {
       carForm.reset();
     }
 
-    // this.photoInput.nativeElement.value = '';
-    // this.carService.uploadPercent = undefined;
-    // this.carService.photoUrl = undefined;
+    this.photoInput.nativeElement.value = '';
+    this.carService.uploadPercent = undefined;
+    this.carService.photoUrl = undefined;
 
     this.carService.selectedCar = new Car();
   }

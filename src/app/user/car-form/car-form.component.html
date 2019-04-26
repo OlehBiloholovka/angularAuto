@@ -133,18 +133,18 @@
 <!--          </div>-->
 <!--        </div>-->
 <!--      </form>-->
-<!--      <input #photoInput type="file" (change)="onPhotoUpload($event)" accept="image/*" />-->
-<!--      <br>-->
-<!--      <br>-->
-<!--      <div class="col-6 px-0">-->
-<!--        <div *ngIf="onGetUploadPercent()" class="progress" >-->
-<!--          <div class="progress-bar progress-bar-striped progress-bar-animated"-->
-<!--               role="progressbar"-->
-<!--               [ngStyle]="{ 'width': (onGetUploadPercent() | async) + '%'}"-->
-<!--          >{{ (onGetUploadPercent() | async) | number }} %</div>-->
-<!--        </div>-->
-<!--        <img *ngIf="onGetUploadURL()" src="{{onGetUploadURL() | async}}" width="100%" alt="carPhoto"><br>-->
-<!--      </div>-->
+      <input #photoInput type="file" (change)="onPhotoUpload($event)" accept="image/*" />
+      <br>
+      <br>
+      <div class="col-6 px-0">
+        <div *ngIf="onGetUploadPercent()" class="progress" >
+          <div class="progress-bar progress-bar-striped progress-bar-animated"
+               role="progressbar"
+               [ngStyle]="{ 'width': (onGetUploadPercent() | async) + '%'}"
+          >{{ (onGetUploadPercent() | async) | number }} %</div>
+        </div>
+        <img *ngIf="onGetUploadURL()" src="{{onGetUploadURL() | async}}" width="100%" alt="carPhoto"><br>
+      </div>
     </div>
     <hr>
     <h3>Options</h3>
