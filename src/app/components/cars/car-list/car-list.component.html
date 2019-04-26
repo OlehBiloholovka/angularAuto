@@ -28,7 +28,7 @@
             </div>
             <div class="btn-group" *ngIf="id && isUserCar(car.userID)">
               <button type="button" class="btn btn-sm btn-outline-success" (click)="onEdit(car)">edit</button>
-              <button type="button" class="btn btn-sm btn-outline-danger" (click)="onDelete(car.$key)">delete</button>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="onDelete(car.key)">delete</button>
             </div>
           </div>
         </div>

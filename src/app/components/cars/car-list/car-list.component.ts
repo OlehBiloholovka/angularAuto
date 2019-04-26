@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../core/auth.service';
 import {Observable} from 'rxjs';
 import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
+import {map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-car-list',
@@ -31,11 +32,24 @@ export class CarListComponent implements OnInit {
 
   getCars(userID?: string): void {
     this.carList = userID
-      ? this.carService.getCarsByUserID(userID).valueChanges()
-      : this.carService.getAllCars().valueChanges();
+      ? this.carService.getCarsByUserID(userID)
+        .snapshotChanges()
+        .pipe(
+          map(value =>
+            value.map(c => ({ key: c.payload.key, ...c.payload.val() }))
+          )
+        )
+      : this.carService.getAllCars()
+        .snapshotChanges()
+        .pipe(
+          map(value =>
+            value.map(c => ({ key: c.payload.key, ...c.payload.val() }))
+          )
+        );
+
     // this.carList
     //   .forEach(cars => cars.forEach(car => {
-    //     car.category.make.label = this.autoRiaService.getMakes(car.category.id);
+    //     car.category.make.label = this.autoRiaService.getNewMakes(car.category.id);
     //   }))
     //   .catch(console.log);
   }

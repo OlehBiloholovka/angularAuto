@@ -3,20 +3,16 @@ import {Category} from './category.model';
 import {RiaItem} from './ria-item.model';
 
 export class Car {
-  $key: string;
+  key: string;
   userID: string;
   year: number;
   mileage: number;
   price: number;
   capacity: number;
+  color: RiaItem = new RiaItem();
   engineType: RiaItem = new RiaItem();
   region: Region = new Region();
   category: Category = new Category();
-
-  // name?: string;
-  // model?: string;
-  // engine?: number;
-  // userID?: string;
   photoURLs?: string[] = [];
   options: any[] = [];
 }

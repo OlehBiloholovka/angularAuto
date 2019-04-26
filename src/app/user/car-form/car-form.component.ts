@@ -8,11 +8,10 @@ import {CarService} from '../../components/cars/shared/car.service';
 import {ToastrService} from 'ngx-toastr';
 import {Category} from '../../components/cars/shared/category.model';
 import {Make} from '../../components/cars/shared/make.model';
-import {RiaModel} from '../../components/cars/shared/auto-ria/ria-model.model';
-import {RiaMarka} from '../../components/cars/shared/auto-ria/ria-marka.model';
 import {Region} from '../../components/cars/shared/region.model';
 import {RiaItem} from '../../components/cars/shared/ria-item.model';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AuthService} from '../../core/auth.service';
 
 @Component({
   selector: 'app-car-form',
@@ -24,6 +23,8 @@ export class CarFormComponent implements OnInit {
   constructor(private autoRiaService: AutoRiaService,
               private carService: CarService,
               private route: ActivatedRoute,
+              private router: Router,
+              private authService: AuthService,
               private toastService: ToastrService) { }
   public currentCar: Car;
 // Form variables
@@ -43,8 +44,8 @@ export class CarFormComponent implements OnInit {
 
 
 // other params
-  makes: RiaMarka[];
-  models: RiaModel[];
+  makes: MainParameter[];
+  models: MainParameter[];
   years: number[] = [];
 
   static isThisElement(elementId: number, id: number) {
@@ -52,6 +53,9 @@ export class CarFormComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (!this.authService.isLoggedIn) {
+      this.router.navigate(['/login']).catch(console.log);
+    }
     this.currentCar = this.carService.selectedCar;
     this.carService.getAllCars();
     this.getYears();
@@ -70,6 +74,7 @@ export class CarFormComponent implements OnInit {
         this.getOptions();
         this.getModels();
         this.getCities();
+        this.getDriverTypes();
       }
     });
   }
@@ -176,7 +181,7 @@ export class CarFormComponent implements OnInit {
     const category: Category = new Category();
     category.id = event;
     this.currentCar.category = category;
-    // this.getDriverTypes();
+    this.getDriverTypes();
     this.getMakes();
     this.getBodyStyles();
     this.getGearboxes();
@@ -227,15 +232,15 @@ export class CarFormComponent implements OnInit {
 
   onSubmit(carForm: NgForm) {
     this.currentCar.category.make.label = this.makes
-      .find(value =>  CarFormComponent.isThisElement(value.marka_id, this.currentCar.category.make.id)).name;
+      .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.category.make.id)).name;
     this.currentCar.category.make.model.label = this.models
-      .find(value =>  CarFormComponent.isThisElement(value.model_id, this.currentCar.category.make.model.id)).name;
+      .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.category.make.model.id)).name;
     this.currentCar.engineType.label = this.engineTypes
       .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.engineType.id)).name;
-    if (carForm.value.$key == null) {
-      this.carService.createCar(this.carService.selectedCar);
+    if (carForm.value.key == null) {
+      this.carService.createCar(this.currentCar);
     } else {
-      this.carService.updateCar(this.carService.selectedCar.$key, this.carService.selectedCar);
+      this.carService.updateCar(this.currentCar.key, this.currentCar);
     }
     this.onResetForm(carForm);
     this.toastService.success('Submitted Successfully', 'Car Register');
@@ -251,5 +256,17 @@ export class CarFormComponent implements OnInit {
     // this.carService.photoUrl = undefined;
 
     this.carService.selectedCar = new Car();
+  }
+
+  onPhotoUpload(event) {
+    this.carService.uploadPhoto(event);
+  }
+
+  onGetUploadURL() {
+    return this.carService.photoUrl;
+  }
+
+  onGetUploadPercent() {
+    return this.carService.uploadPercent;
   }
 }

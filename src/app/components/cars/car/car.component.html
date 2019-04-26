@@ -12,7 +12,7 @@
 </div>
 <br>
 <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" class="form-group">
-  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().$key" >
+  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().key" >
   <input type="hidden" class="form-control" name="photoURLs" #photoURLs="ngModel" [(ngModel)]="onGetSelectedCar().photoURLs" >
   <input type="hidden" class="form-control" name="userID" #userID="ngModel" [(ngModel)]="onGetSelectedCar().userID" >
   <div class="from-group row">

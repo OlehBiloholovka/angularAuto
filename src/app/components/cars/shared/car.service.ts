@@ -58,7 +58,8 @@ export class CarService {
   }
 
   getCarsByUserID(userID: string): AngularFireList<Car> {
-    return this.db.list<Car>(this.basePath, ref => ref.orderByChild('userID').equalTo(userID));
+    this.carList =  this.db.list<Car>(this.basePath, ref => ref.orderByChild('userID').equalTo(userID));
+    return this.carList;
   }
 
   getCar(key: string): AngularFireObject<Car> {
@@ -75,7 +76,7 @@ export class CarService {
 
   updateCar(key: string, value: any): void {
     this.carList.update(key, value)
-      .catch(error => CarService.handleError(error));
+      .catch(CarService.handleError);
   }
 
   deleteCar(key: string): void {

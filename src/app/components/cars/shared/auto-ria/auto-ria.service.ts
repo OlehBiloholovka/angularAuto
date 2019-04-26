@@ -50,9 +50,11 @@ export class AutoRiaService {
 
 // RIA other params urls
 // RIA other params keys
-  private makeUrl = '/new/marks';
+  private makeUrl = '/marks/';
+  private modelUrl = '/models';
+  private newMakeUrl = '/new/marks';
   private makeKey = 'marka_id';
-  private modelUrl = '/new/models';
+  private newModelUrl = '/new/models';
   private modelKey = 'model_id';
   private generationUrl = '/new/generation';
   private generationKey = 'generation_id';
@@ -125,19 +127,31 @@ export class AutoRiaService {
   }
 
 // Other params queries
-  getMakes(categoryID: number): Observable<RiaMarka[]> {
+  getNewMakes(categoryID: number): Observable<RiaMarka[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.categoryKey, categoryID.toString())};
-    return this.http.get<RiaMarka[]>(this.url + this.makeUrl, options);
+    return this.http.get<RiaMarka[]>(this.url + this.newMakeUrl, options);
   }
 
-  getModels(categoryID: number, makeID: number): Observable<RiaModel[]> {
+  getMakes(categoryID: number): Observable<MainParameter[]> {
+    const options = {params: new HttpParams()
+        .set(this.apiKey, this.RIA_API_KEY)};
+    return this.http.get<MainParameter[]>(this.url + this.categoryUrl + categoryID + this.makeUrl, options);
+  }
+
+  getNewModels(categoryID: number, makeID: number): Observable<RiaModel[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.categoryKey, categoryID.toString())
         .append(this.makeKey, makeID.toString())};
-    return this.http.get<RiaModel[]>(this.url + this.modelUrl, options);
+    return this.http.get<RiaModel[]>(this.url + this.newModelUrl, options);
+  }
+
+  getModels(categoryID: number, makeID: number): Observable<MainParameter[]> {
+    const options = {params: new HttpParams()
+        .set(this.apiKey, this.RIA_API_KEY)};
+    return this.http.get<MainParameter[]>(this.url + this.categoryUrl + categoryID + this.makeUrl + makeID + this.modelUrl, options);
   }
 
   getGenerations(modelID: number): Observable<RiaGeneration[]> {

@@ -1,6 +1,6 @@
 <div class="container">
   <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)"  class="form-group was-validated">
-    <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="currentCar.$key" >
+    <input type="hidden" class="form-control" name="key" #key="ngModel" [(ngModel)]="currentCar.key" >
     <h3>Main info</h3>
     <div class="row form-group">
       <div class="col-md-3">
@@ -24,7 +24,7 @@
                 id="make"
                 name="make" required>
           <option></option>
-          <option  *ngFor="let make of makes" [value]="make.marka_id">{{make.name}}</option>
+          <option  *ngFor="let make of makes" [value]="make.value">{{make.name}}</option>
         </select>
       </div>
       <div class="col-md-3">
@@ -36,7 +36,7 @@
                 id="model"
                 name="model" required>
           <option></option>
-          <option  *ngFor="let model of models" [value]="model.model_id">{{model.name}}</option>
+          <option  *ngFor="let model of models" [value]="model.value">{{model.name}}</option>
         </select>
       </div>
     </div>
@@ -118,6 +118,35 @@
       </div>
     </div>
     <hr>
+    <h3>Photos</h3>
+    <div class="row form-group">
+<!--      <form class="md-form">-->
+<!--        <div class="file-field">-->
+<!--          <div class="z-depth-1-half mb-4">-->
+<!--            <img src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg" class="img-fluid" alt="example placeholder">-->
+<!--          </div>-->
+<!--          <div class="d-flex justify-content-center">-->
+<!--            <div class="btn btn-mdb-color btn-rounded float-left">-->
+<!--              <span>Choose file</span>-->
+<!--              <input type="file">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--      <input #photoInput type="file" (change)="onPhotoUpload($event)" accept="image/*" />-->
+<!--      <br>-->
+<!--      <br>-->
+<!--      <div class="col-6 px-0">-->
+<!--        <div *ngIf="onGetUploadPercent()" class="progress" >-->
+<!--          <div class="progress-bar progress-bar-striped progress-bar-animated"-->
+<!--               role="progressbar"-->
+<!--               [ngStyle]="{ 'width': (onGetUploadPercent() | async) + '%'}"-->
+<!--          >{{ (onGetUploadPercent() | async) | number }} %</div>-->
+<!--        </div>-->
+<!--        <img *ngIf="onGetUploadURL()" src="{{onGetUploadURL() | async}}" width="100%" alt="carPhoto"><br>-->
+<!--      </div>-->
+    </div>
+    <hr>
     <h3>Options</h3>
     <div class="row form-group">
       <div class="col-md-3">
@@ -156,6 +185,29 @@
             <span class="input-group-text">l</span>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3">
+        <label for="driverType">Driver Type</label>
+        <select [(ngModel)]="currentCar.category.driverType.id"
+                [disabled]="!currentCar.category.id"
+                class="form-control custom-select"
+                id="driverType"
+                name="driverType">
+          <option></option>
+          <option *ngFor="let driverType of driverTypes" [value]="driverType.value">{{driverType.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="color">Color</label>
+        <select [(ngModel)]="currentCar.color.id"
+                class="form-control custom-select"
+                id="color"
+                name="color">
+          <option></option>
+          <option *ngFor="let color of colors" [value]="color.value">{{color.name}}</option>
+        </select>
       </div>
     </div>
     <hr>
