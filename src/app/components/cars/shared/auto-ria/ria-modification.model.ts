@@ -1,4 +1,4 @@
-export interface Modification {
+export interface RiaModification {
   'name': string;
   'model_id': number;
   'marka_id': number;

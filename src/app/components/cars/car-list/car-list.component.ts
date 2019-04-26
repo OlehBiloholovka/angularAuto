@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../core/auth.service';
 import {Observable} from 'rxjs';
+import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
 
 @Component({
   selector: 'app-car-list',
@@ -24,7 +25,6 @@ export class CarListComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params.id;
-
     });
     this.getCars(this.id);
   }
@@ -32,12 +32,17 @@ export class CarListComponent implements OnInit {
   getCars(userID?: string): void {
     this.carList = userID
       ? this.carService.getCarsByUserID(userID).valueChanges()
-      : this.carList = this.carService.getAllCars().valueChanges();
+      : this.carService.getAllCars().valueChanges();
+    // this.carList
+    //   .forEach(cars => cars.forEach(car => {
+    //     car.category.make.label = this.autoRiaService.getMakes(car.category.id);
+    //   }))
+    //   .catch(console.log);
   }
 
   onEdit(car: Car) {
     this.carService.selectedCar = Object.assign({}, car);
-    this.router.navigate(['/car'], {queryParams: {isEdit: true}});
+    this.router.navigate(['user/form'], {queryParams: {isEdit: true}}).catch(console.log);
   }
 
   onDelete(key: string) {

@@ -1,8 +1,8 @@
-<nav class="d-none d-md-block bg-light sidebar">
+<nav class="d-none d-md-block bg-light border-right shadow h-100 sidebar">
   <div class="sidebar-sticky">
     <ul class="nav flex-column nav-pills">
       <li class="nav-item">
-        <a class="nav-link" [routerLink]="['cars', getUserID()]" [routerLinkActive]="'active'">My cars</a>
+        <a class="nav-link" [routerLink]="[getUserID(), 'cars']" [routerLinkActive]="'active'">My cars</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" routerLink="form" [routerLinkActive]="'active'">Edit car</a>

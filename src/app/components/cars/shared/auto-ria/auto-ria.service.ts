@@ -2,12 +2,19 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {MainParameter} from './main-parameter.model';
 import {Observable} from 'rxjs';
-import {Make} from './make.model';
-import {Model} from './model.model';
-import {Generation} from './generation.model';
-import {GenerationBodyStyle} from './generation-bodystyle.model';
-import {Modification} from './modification.model';
-import {Equip} from './equip.model';
+import { RiaGeneration } from './ria-generation.model';
+import {RiaGenerationBodyStyle} from './ria-generation-bodystyle.model';
+import {RiaModification} from './ria-modification.model';
+import {RiaEquip} from './ria-equip.model';
+import {RiaModel} from './ria-model.model';
+import {RiaMarka} from './ria-marka.model';
+
+export enum Language {
+  UA = '4',
+  PL = '5',
+  RU = '2',
+  EN = '1'
+}
 
 @Injectable({
   providedIn: 'root'
@@ -55,12 +62,16 @@ export class AutoRiaService {
   private modificationKey = 'base_id';
   private equipUrl = '/new/equip_base';
 
+
+
   constructor(private http: HttpClient) { }
 
 // Makes new params for query
-  private getNewParams(): HttpParams {
+  private getNewParams(language?: Language): HttpParams {
+    let lang: string = language;
+    if (!language) {lang = this.languageValue; }
     return new HttpParams()
-      .set(this.apiKey, this.RIA_API_KEY).append(this.languageKey, this.languageValue);
+      .set(this.apiKey, this.RIA_API_KEY).append(this.languageKey, lang);
   }
 // Main params queries
   getCategories(): Observable<MainParameter[]> {
@@ -103,57 +114,57 @@ export class AutoRiaService {
     return this.http.get<MainParameter[]>(this.url + this.countryUrl, options);
   }
 
-  getStates(): Observable<MainParameter[]> {
-    const options = {params: this.getNewParams()};
+  getStates(language?: Language): Observable<MainParameter[]> {
+    const options = {params: this.getNewParams(language)};
     return this.http.get<MainParameter[]>(this.url + this.stateUrl, options);
   }
 
-  getCities(stateID: number): Observable<MainParameter[]> {
+  getCities(stateID: number, language?: Language ): Observable<MainParameter[]> {
     const options = {params: this.getNewParams()};
-    return this.http.get<MainParameter[]>(this.url + this.stateUrl + stateID + this.cityUrl, options);
+    return this.http.get<MainParameter[]>(this.url + this.stateUrl + '/' + stateID + this.cityUrl, options);
   }
 
 // Other params queries
-  getMakes(categoryID: number): Observable<Make[]> {
+  getMakes(categoryID: number): Observable<RiaMarka[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.categoryKey, categoryID.toString())};
-    return this.http.get<Make[]>(this.url + this.makeUrl, options);
+    return this.http.get<RiaMarka[]>(this.url + this.makeUrl, options);
   }
 
-  getModels(categoryID: number, makeID: number): Observable<Model[]> {
+  getModels(categoryID: number, makeID: number): Observable<RiaModel[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.categoryKey, categoryID.toString())
         .append(this.makeKey, makeID.toString())};
-    return this.http.get<Model[]>(this.url + this.modelUrl, options);
+    return this.http.get<RiaModel[]>(this.url + this.modelUrl, options);
   }
 
-  getGenerations(modelID: number): Observable<Generation[]> {
+  getGenerations(modelID: number): Observable<RiaGeneration[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.modelKey, modelID.toString())};
-    return this.http.get<Generation[]>(this.url + this.generationUrl, options);
+    return this.http.get<RiaGeneration[]>(this.url + this.generationUrl, options);
   }
 
-  getGenerationBodyStyles(generationID: number): Observable<GenerationBodyStyle[]> {
+  getGenerationBodyStyles(generationID: number): Observable<RiaGenerationBodyStyle[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.generationKey, generationID.toString())};
-    return this.http.get<GenerationBodyStyle[]>(this.url + this.generationBodyStyleUrl, options);
+    return this.http.get<RiaGenerationBodyStyle[]>(this.url + this.generationBodyStyleUrl, options);
   }
 
-  getModifications(generationBodystyleID: number): Observable<Modification[]> {
+  getModifications(generationBodystyleID: number): Observable<RiaModification[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.generationBodyStyleKey, generationBodystyleID.toString())};
-    return this.http.get<Modification[]>(this.url + this.modificationUrl, options);
+    return this.http.get<RiaModification[]>(this.url + this.modificationUrl, options);
   }
 
-  getEquips(modificationID: number): Observable<Equip[]> {
+  getEquips(modificationID: number): Observable<RiaEquip[]> {
     const options = {params: new HttpParams()
         .set(this.apiKey, this.RIA_API_KEY)
         .append(this.modificationKey, modificationID.toString())};
-    return this.http.get<Equip[]>(this.url + this.equipUrl, options);
+    return this.http.get<RiaEquip[]>(this.url + this.equipUrl, options);
   }
 }

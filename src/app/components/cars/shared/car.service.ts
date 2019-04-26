@@ -5,6 +5,7 @@ import {finalize} from 'rxjs/operators';
 import {AngularFireStorage} from '@angular/fire/storage';
 import {Observable} from 'rxjs';
 import {AngularFireAuth} from '@angular/fire/auth';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,10 @@ import {AngularFireAuth} from '@angular/fire/auth';
 export class CarService {
 
 
-  constructor(private db: AngularFireDatabase, private storage: AngularFireStorage, public afAuth: AngularFireAuth) {
+  constructor(private db: AngularFireDatabase,
+              private storage: AngularFireStorage,
+              public afAuth: AngularFireAuth,
+              private angularFirestore: AngularFirestore) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.userID = user.uid;
@@ -26,11 +30,26 @@ export class CarService {
 
   private basePath = '/cars';
 
+  // new db
+  private carsPath = '/cars';
+  carCollection: AngularFirestoreCollection<Car>;
+
   car: AngularFireObject<Car> = null;
   userID: string;
 
   private static handleError(error: any) {
     console.log(error);
+  }
+
+  getAllCarsNEW(): AngularFirestoreCollection<Car> {
+    this.carCollection = this.angularFirestore.collection<Car>(this.carsPath);
+    return this.carCollection;
+  }
+
+  createCarNEW(car: Car): void {
+    car.userID = this.userID;
+    this.carCollection.add(car)
+      .catch(error => CarService.handleError(error));
   }
 
   getAllCars(): AngularFireList<Car> {

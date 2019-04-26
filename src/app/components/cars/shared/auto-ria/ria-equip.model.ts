@@ -1,4 +1,4 @@
-export interface Equip {
+export interface RiaEquip {
   'year': string;
   'name': string;
   'equip_id': number;

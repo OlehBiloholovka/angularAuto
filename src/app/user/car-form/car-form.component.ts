@@ -1,14 +1,18 @@
 import {Component, OnInit} from '@angular/core';
 import {AutoRiaService} from '../../components/cars/shared/auto-ria/auto-ria.service';
 import {MainParameter} from '../../components/cars/shared/auto-ria/main-parameter.model';
-import {Make} from '../../components/cars/shared/auto-ria/make.model';
-import {Model} from '../../components/cars/shared/auto-ria/model.model';
-import {Generation} from '../../components/cars/shared/auto-ria/generation.model';
-import {GenerationBodyStyle} from '../../components/cars/shared/auto-ria/generation-bodystyle.model';
-import {Modification} from '../../components/cars/shared/auto-ria/modification.model';
-import {Equip} from '../../components/cars/shared/auto-ria/equip.model';
 import {CheckboxItem} from '../../components/checkbox-group/shared/checkbox-item.model';
 import {Car} from '../../components/cars/shared/car.model';
+import {NgForm} from '@angular/forms';
+import {CarService} from '../../components/cars/shared/car.service';
+import {ToastrService} from 'ngx-toastr';
+import {Category} from '../../components/cars/shared/category.model';
+import {Make} from '../../components/cars/shared/make.model';
+import {RiaModel} from '../../components/cars/shared/auto-ria/ria-model.model';
+import {RiaMarka} from '../../components/cars/shared/auto-ria/ria-marka.model';
+import {Region} from '../../components/cars/shared/region.model';
+import {RiaItem} from '../../components/cars/shared/ria-item.model';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-car-form',
@@ -16,7 +20,12 @@ import {Car} from '../../components/cars/shared/car.model';
   styleUrls: ['./car-form.component.css']
 })
 export class CarFormComponent implements OnInit {
-  public currentCar: Car = new Car();
+
+  constructor(private autoRiaService: AutoRiaService,
+              private carService: CarService,
+              private route: ActivatedRoute,
+              private toastService: ToastrService) { }
+  public currentCar: Car;
 // Form variables
   carOptions = new Array<CheckboxItem>();
 
@@ -29,43 +38,40 @@ export class CarFormComponent implements OnInit {
   options: MainParameter[];
   colors: MainParameter[];
   countries: MainParameter[];
-  states: MainParameter[];
+  regions: MainParameter[];
   cities: MainParameter[];
 
-// selected main params
-  selectedCategoryID: number;
-  selectedBodyStyleID: number;
-  selectedDriverType: number;
-  selectedEngineType: number;
-  selectedGearboxID: number;
-  selectedOptionID: number;
-  selectedColorID: number;
-  selectedCountryID: number;
-  selectedStateID: number;
-  selectedCityID: number;
 
 // other params
-  makes: Make[];
-  selectedMakeID: number;
-  models: Model[];
-  selectedModelID: number;
-  generations: Generation[];
-  selectedGenerationID: number;
-  generationBodyStyles: GenerationBodyStyle[];
-  selectedGenerationBodyStyleID: number;
-  modifications: Modification[];
-  selectedModificationID: number;
-  equips: Equip[];
-  selectedEquipID: number;
+  makes: RiaMarka[];
+  models: RiaModel[];
+  years: number[] = [];
 
-  constructor(private autoRiaService: AutoRiaService) { }
+  static isThisElement(elementId: number, id: number) {
+    return elementId === id;
+  }
 
   ngOnInit() {
+    this.currentCar = this.carService.selectedCar;
+    this.carService.getAllCars();
+    this.getYears();
     this.getCategories();
     this.getEngineTypes();
     this.getColors();
     this.getCountries();
-    this.getStates();
+    this.getRegions();
+    this.route.queryParams.subscribe(params => {
+      if (!params.isEdit) {
+        this.onResetForm();
+      } else {
+        this.getMakes();
+        this.getBodyStyles();
+        this.getGearboxes();
+        this.getOptions();
+        this.getModels();
+        this.getCities();
+      }
+    });
   }
 // Main params methods
   private getCategories() {
@@ -78,7 +84,7 @@ export class CarFormComponent implements OnInit {
 
   private getBodyStyles() {
     this.autoRiaService
-      .getBodyStyles(this.selectedCategoryID)
+      .getBodyStyles(this.currentCar.category.id)
       .subscribe(resp => {
         this.bodyStyles = resp;
       }, error => console.log(error));
@@ -86,7 +92,7 @@ export class CarFormComponent implements OnInit {
 
   private getDriverTypes() {
     this.autoRiaService
-      .getDriverTypes(this.selectedCategoryID)
+      .getDriverTypes(this.currentCar.category.id)
       .subscribe(resp => {
         this.driverTypes = resp;
       }, error => console.log(error));
@@ -102,7 +108,7 @@ export class CarFormComponent implements OnInit {
 
   private getGearboxes() {
     this.autoRiaService
-      .getGearboxes(this.selectedCategoryID)
+      .getGearboxes(this.currentCar.category.id)
       .subscribe(resp => {
         this.gearboxes = resp;
       }, error => console.log(error));
@@ -110,7 +116,7 @@ export class CarFormComponent implements OnInit {
 
   private getOptions() {
     this.autoRiaService
-      .getOptions(this.selectedCategoryID)
+      .getOptions(this.currentCar.category.id)
       .subscribe(resp => {
         this.options = resp;
         this.carOptions = resp.map(opt => new CheckboxItem(opt.value, opt.name));
@@ -133,17 +139,17 @@ export class CarFormComponent implements OnInit {
       }, error => console.log(error));
   }
 
-  private getStates() {
+  private getRegions() {
     this.autoRiaService
       .getStates()
       .subscribe(resp => {
-        this.states = resp;
+        this.regions = resp;
       }, error => console.log(error));
   }
 
   private getCities() {
     this.autoRiaService
-      .getCities(this.selectedStateID)
+      .getCities(this.currentCar.region.id)
       .subscribe(resp => {
         this.cities = resp;
       }, error => console.log(error));
@@ -152,7 +158,7 @@ export class CarFormComponent implements OnInit {
 // Other params methods
   private getMakes() {
     this.autoRiaService
-      .getMakes(this.selectedCategoryID)
+      .getMakes(this.currentCar.category.id)
       .subscribe(resp => {
         this.makes = resp;
       }, error => console.log(error));
@@ -160,58 +166,90 @@ export class CarFormComponent implements OnInit {
 
   private getModels() {
     this.autoRiaService
-      .getModels(this.selectedCategoryID, this.selectedMakeID)
+      .getModels(this.currentCar.category.id, this.currentCar.category.make.id)
       .subscribe(resp => {
         this.models = resp;
       }, error => console.log(error));
   }
 
-  private getGenerations() {
-    this.autoRiaService
-      .getGenerations(this.selectedModelID)
-      .subscribe(resp => {
-        this.generations = resp;
-      }, error => console.log(error));
-  }
-
-  private getGenerationBodystyles() {
-    this.autoRiaService
-      .getGenerationBodyStyles(this.selectedGenerationID)
-      .subscribe(resp => {
-        this.generationBodyStyles = resp;
-      }, error => console.log(error));
-  }
-
-  private getModifications() {
-    this.autoRiaService
-      .getModifications(this.selectedGenerationBodyStyleID)
-      .subscribe(resp => {
-        this.modifications = resp;
-      }, error => console.log(error));
-  }
-
-  private getEquips() {
-    this.autoRiaService
-      .getEquips(this.selectedModificationID)
-      .subscribe(resp => {
-        this.equips = resp;
-      }, error => console.log(error));
-  }
-
-  onChangeCategory() {
+  onChangeCategory(event: any) {
+    const category: Category = new Category();
+    category.id = event;
+    this.currentCar.category = category;
+    // this.getDriverTypes();
+    this.getMakes();
     this.getBodyStyles();
-    this.getDriverTypes();
     this.getGearboxes();
     this.getOptions();
-    this.getMakes();
   }
 
-  onChangeState() {
+  onChangeMake(event: any) {
+    const make: Make = new Make();
+    make.id = Number.parseInt(event, 10);
+    this.currentCar.category.make = make;
+    this.getModels();
+  }
+
+  onChangeModel(event: any) {
+    const model: RiaItem = new RiaItem();
+    model.id = Number.parseInt(event, 10);
+    this.currentCar.category.make.model = model;
+  }
+
+  onChangeEngineType(event: any) {
+    const engineType: RiaItem = new RiaItem();
+    engineType.id = Number.parseInt(event, 10);
+    this.currentCar.engineType = engineType;
+  }
+
+  onChangeRegion(event: any) {
+    const region: Region = new Region();
+    region.id = event;
+    this.currentCar.region = region;
     this.getCities();
   }
 
-  onOptionsChange(value) {
-    this.currentCar.options = value;
-    console.log('Car options:' , this.currentCar.options);
+  onOptionsChange(values) {
+    this.currentCar.category.options = values.map(v => {
+      const option = new RiaItem();
+      option.id = v;
+      return option;
+    });
+  }
+
+  private getYears() {
+    const date = new Date();
+    const fullYear = date.getFullYear();
+    for (let i = fullYear; i >= 1900; i--) {
+      this.years.push(i);
+    }
+  }
+
+  onSubmit(carForm: NgForm) {
+    this.currentCar.category.make.label = this.makes
+      .find(value =>  CarFormComponent.isThisElement(value.marka_id, this.currentCar.category.make.id)).name;
+    this.currentCar.category.make.model.label = this.models
+      .find(value =>  CarFormComponent.isThisElement(value.model_id, this.currentCar.category.make.model.id)).name;
+    this.currentCar.engineType.label = this.engineTypes
+      .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.engineType.id)).name;
+    if (carForm.value.$key == null) {
+      this.carService.createCar(this.carService.selectedCar);
+    } else {
+      this.carService.updateCar(this.carService.selectedCar.$key, this.carService.selectedCar);
+    }
+    this.onResetForm(carForm);
+    this.toastService.success('Submitted Successfully', 'Car Register');
+  }
+
+  onResetForm(carForm?: NgForm) {
+    if (carForm != null) {
+      carForm.reset();
+    }
+
+    // this.photoInput.nativeElement.value = '';
+    // this.carService.uploadPercent = undefined;
+    // this.carService.photoUrl = undefined;
+
+    this.carService.selectedCar = new Car();
   }
 }

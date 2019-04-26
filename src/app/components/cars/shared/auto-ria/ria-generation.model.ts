@@ -1,4 +1,4 @@
-export interface Generation {
+export interface RiaGeneration {
   'year_to': number;
   'year_from': number;
   'name': string;

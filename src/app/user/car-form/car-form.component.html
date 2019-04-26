@@ -1,87 +1,205 @@
 <div class="container">
-  <div class="form-group">
-    <label for="options">Options</label>
-    <app-checkbox-group
-      [options]="carOptions"
-      [selectedValues]="currentCar.options"
-      id="options"
-      (toggle)="onOptionsChange($event)">
-    </app-checkbox-group>
-    <br>
-    <label for="category">Category</label>
-    <select class="form-control" id="category" [(ngModel)]="selectedCategoryID" (ngModelChange)="onChangeCategory()">
-      <option></option>
-      <option *ngFor="let category of categories" [value]="category.value">{{category.name}}</option>
-    </select>
-    <label for="bodyStyle">Body Style</label>
-    <select class="form-control" id="bodyStyle" [(ngModel)]="selectedBodyStyleID">
-      <option></option>
-      <option *ngFor="let bodyStyle of bodyStyles" [value]="bodyStyle.value">{{bodyStyle.name}}</option>
-    </select>
-    <label for="driverType">Driver Type</label>
-    <select class="form-control" id="driverType" [(ngModel)]="selectedDriverType">
-      <option></option>
-      <option *ngFor="let driverType of driverTypes" [value]="driverType.value">{{driverType.name}}</option>
-    </select>
-    <label for="engineType">Engine Type</label>
-    <select class="form-control" id="engineType" [(ngModel)]="selectedEngineType">
-      <option></option>
-      <option *ngFor="let engineType of engineTypes" [value]="engineType.value">{{engineType.name}}</option>
-    </select>
-    <label for="gearbox">Gearbox</label>
-    <select class="form-control" id="gearbox" [(ngModel)]="selectedGearboxID">
-      <option></option>
-      <option *ngFor="let gearbox of gearboxes" [value]="gearbox.value">{{gearbox.name}}</option>
-    </select>
-    <label for="option">Options</label>
-    <select class="form-control" id="option" [(ngModel)]="selectedOptionID">
-      <option></option>
-      <option *ngFor="let option of options" [value]="option.value">{{option.name}}</option>
-    </select>
-    <label for="color">Colors</label>
-    <select class="form-control" id="color" [(ngModel)]="selectedColorID">
-      <option></option>
-      <option *ngFor="let color of colors" [value]="color.value">{{color.name}}</option>
-    </select>
-    <label for="country">Country</label>
-    <select class="form-control" id="country" [(ngModel)]="selectedCountryID">
-      <option></option>
-      <option *ngFor="let country of countries" [value]="country.value">{{country.name}}</option>
-    </select>
-    <label for="state">State</label>
-    <select class="form-control" id="state" [(ngModel)]="selectedStateID" (ngModelChange)="onChangeState()">
-      <option></option>
-      <option *ngFor="let state of states" [value]="state.value">{{state.name}}</option>
-    </select>
-    <label for="city">City</label>
-    <select class="form-control" id="city" [(ngModel)]="selectedCityID">
-      <option></option>
-      <option *ngFor="let city of cities" [value]="city.value">{{city.name}}</option>
-    </select>
-    <label for="make">Make</label>
-    <select class="form-control" id="make" [(ngModel)]="selectedMakeID" (ngModelChange)="getModels()">
-      <option></option>
-      <option  *ngFor="let make of makes" [value]="make.marka_id">{{make.name}}</option>
-    </select>
-    <label for="model">Model</label>
-    <select class="form-control" id="model" [(ngModel)]="selectedModelID" (ngModelChange)="getGenerations()">
-      <option  *ngFor="let model of models" [value]="model.model_id">{{model.name}}</option>
-    </select>
-    <label for="generation">Generation</label>
-    <select class="form-control" id="generation" [(ngModel)]="selectedGenerationID" (ngModelChange)="getGenerationBodystyles()">
-      <option  *ngFor="let generation of generations" [value]="generation.generation_id">{{generation.name}}</option>
-    </select>
-    <label for="generationBodyStyle">GenerationBodyStyle</label>
-    <select class="form-control" id="generationBodyStyle" [(ngModel)]="selectedGenerationBodyStyleID" (ngModelChange)="getModifications()">
-      <option *ngFor="let generationBodyStyle of generationBodyStyles" [value]="generationBodyStyle.generation_bodystyle_id">{{generationBodyStyle.bodystyle_id}}</option>
-    </select>
-    <label for="modification">Modification</label>
-    <select class="form-control" id="modification" [(ngModel)]="selectedModificationID" (ngModelChange)="getEquips()">
-      <option  *ngFor="let modification of modifications" [value]="modification.base_id">{{modification.name}}</option>
-    </select>
-    <label for="equip">Equip</label>
-    <select class="form-control" id="equip" [(ngModel)]="selectedEquipID">
-      <option  *ngFor="let equip of equips" [value]="equip.equip_id">{{equip.equip_id}}</option>
-    </select>
-  </div>
+  <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)"  class="form-group was-validated">
+    <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="currentCar.$key" >
+    <h3>Main info</h3>
+    <div class="row form-group">
+      <div class="col-md-3">
+        <label for="category">Category</label>
+        <select [ngModel]="currentCar.category.id"
+                (ngModelChange)="onChangeCategory($event)"
+                class="form-control custom-select"
+                id="category"
+                name="category" required>
+          <option></option>
+          <option *ngFor="let category of categories" [value]="category.value">{{category.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="make">Make</label>
+        <select
+                [ngModel]="currentCar.category.make.id"
+                [disabled]="!currentCar.category.id"
+                (ngModelChange)="onChangeMake($event)"
+                class="form-control custom-select"
+                id="make"
+                name="make" required>
+          <option></option>
+          <option  *ngFor="let make of makes" [value]="make.marka_id">{{make.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="model">Model</label>
+        <select [ngModel]="currentCar.category.make.model.id"
+                [disabled]="!currentCar.category.make.id"
+                (ngModelChange)="onChangeModel($event)"
+                class="form-control custom-select"
+                id="model"
+                name="model" required>
+          <option></option>
+          <option  *ngFor="let model of models" [value]="model.model_id">{{model.name}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col-md-3">
+        <label for="bodyStyle">Body Style</label>
+        <select [(ngModel)]="currentCar.category.bodyStyle.id"
+                [disabled]="!currentCar.category.id"
+                class="form-control custom-select"
+                id="bodyStyle"
+                name="bodyStyle" required>
+          <option></option>
+          <option *ngFor="let bodyStyle of bodyStyles" [value]="bodyStyle.value">{{bodyStyle.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="year">Year</label>
+        <select [(ngModel)]="currentCar.year"
+                class="form-control custom-select"
+                id="year"
+                name="year" required>
+          <option></option>
+          <option *ngFor="let year of years" [value]="year">{{year}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="mileage">Mileage</label>
+        <div class="input-group">
+          <input [(ngModel)]="currentCar.mileage"
+                 class="form-control"
+                 id="mileage"
+                 name="mileage"
+                 type="number"
+                 min="0" required>
+          <div class="input-group-append">
+            <span class="input-group-text">km</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h3>Price</h3>
+    <div class="row form-group">
+      <div class="col-md-3">
+        <label for="region">Region</label>
+        <select [ngModel]="currentCar.region.id"
+                (ngModelChange)="onChangeRegion($event)"
+                class="form-control custom-select"
+                id="region"
+                name="region" required>
+          <option></option>
+          <option *ngFor="let region of regions" [value]="region.value">{{region.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="city">City</label>
+        <select [(ngModel)]="currentCar.region.city.id"
+                class="form-control
+                custom-select"
+                id="city"
+                name="city" required>
+          <option></option>
+          <option *ngFor="let city of cities" [value]="city.value">{{city.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="price">Price</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text">$</span>
+          </div>
+          <input [(ngModel)]="currentCar.price"
+                 class="form-control"
+                 id="price"
+                 name="price"
+                 type="number"
+                 min="0" required>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <h3>Options</h3>
+    <div class="row form-group">
+      <div class="col-md-3">
+        <label for="gearbox">Gearbox</label>
+        <select [(ngModel)]="currentCar.category.gearBox.id"
+                [disabled]="!currentCar.category.id"
+                class="form-control custom-select"
+                id="gearbox"
+                name="gearbox">
+          <option></option>
+          <option *ngFor="let gearbox of gearboxes" [value]="gearbox.value">{{gearbox.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="engineType">Engine Type</label>
+        <select [ngModel]="currentCar.engineType.id"
+                (ngModelChange)="onChangeEngineType($event)"
+                class="form-control custom-select"
+                id="engineType"
+                name="engineType">
+          <option></option>
+          <option *ngFor="let engineType of engineTypes" [value]="engineType.value">{{engineType.name}}</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label for="capacity">Capacity</label>
+        <div class="input-group">
+          <input [(ngModel)]="currentCar.capacity"
+                 class="form-control"
+                 id="capacity"
+                 name="capacity"
+                 type="number"
+                 min="0.1"
+                 step="0.1">
+          <div class="input-group-append">
+            <span class="input-group-text">l</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <hr>
+
+    <div [hidden]="!currentCar.category.id">
+      <label for="options">Other options</label>
+      <app-checkbox-group
+        (toggle)="onOptionsChange($event)"
+        [options]="carOptions"
+        [selectedValues]="currentCar.category.options"
+        id="options">
+      </app-checkbox-group>
+    </div>
+
+
+    <div class="form-group">
+      <br>
+      <button class="btn btn-success mr-2" type="submit" [disabled]="!carForm.valid">Submit</button>
+      <button class="btn btn-danger" type="button" (click)="onResetForm(carForm)">Reset</button>
+    </div>
+
+
+<!--    <label for="driverType">Driver Type</label>-->
+<!--    <select class="form-control" id="driverType" [(ngModel)]="selectedDriverType">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let driverType of driverTypes" [value]="driverType.value">{{driverType.name}}</option>-->
+<!--    </select>-->
+
+
+<!--    <label for="option">Options</label>-->
+<!--    <select class="form-control" id="option" [(ngModel)]="selectedOptionID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let option of options" [value]="option.value">{{option.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="color">Colors</label>-->
+<!--    <select class="form-control" id="color" [(ngModel)]="selectedColorID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let color of colors" [value]="color.value">{{color.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="country">Country</label>-->
+<!--    <select class="form-control" id="country" [(ngModel)]="selectedCountryID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let country of countries" [value]="country.value">{{country.name}}</option>-->
+<!--    </select>-->
+
+  </form>
 </div>

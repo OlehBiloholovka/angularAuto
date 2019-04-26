@@ -1,13 +1,22 @@
+import {Region} from './region.model';
+import {Category} from './category.model';
+import {RiaItem} from './ria-item.model';
+
 export class Car {
   $key: string;
-  name: string;
-  model: string;
+  userID: string;
   year: number;
-  engine: number;
-  engineType: string;
   mileage: number;
   price: number;
-  userID: string;
-  photoURLs: string[] = [];
+  capacity: number;
+  engineType: RiaItem = new RiaItem();
+  region: Region = new Region();
+  category: Category = new Category();
+
+  // name?: string;
+  // model?: string;
+  // engine?: number;
+  // userID?: string;
+  photoURLs?: string[] = [];
   options: any[] = [];
 }

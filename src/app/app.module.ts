@@ -23,6 +23,8 @@ import {HttpClientModule} from '@angular/common/http';
 import { CheckboxGroupComponent } from './components/checkbox-group/checkbox-group.component';
 import { SidebarComponent } from './user/sidebar/sidebar.component';
 import { UserComponent } from './user/user.component';
+import {AngularFirestoreModule} from '@angular/fire/firestore';
+import { RiaComponent } from './components/ria/ria.component';
 
 const appRoutes: Routes = [
   {path: '', redirectTo: '/cars', pathMatch: 'full'},
@@ -31,7 +33,7 @@ const appRoutes: Routes = [
   {path: 'login', component: UserLoginComponent},
   {path: 'user', component: UserComponent, children: [
       {path: 'form', component: CarFormComponent},
-      {path: 'cars/:id', component: CarListComponent},
+      {path: ':id/cars', component: CarListComponent},
       {path: 'profile', component: UserProfileComponent},
       {path: 'car', component: CarComponent}
     ]},
@@ -50,7 +52,8 @@ const appRoutes: Routes = [
     CarFormComponent,
     CheckboxGroupComponent,
     SidebarComponent,
-    UserComponent
+    UserComponent,
+    RiaComponent
   ],
   imports: [
     BrowserModule,
@@ -60,6 +63,7 @@ const appRoutes: Routes = [
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     AngularFireStorageModule,
+    AngularFirestoreModule,
     FormsModule,
     ToastrModule.forRoot(),
     RouterModule.forRoot(appRoutes)
