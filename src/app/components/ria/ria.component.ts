@@ -211,7 +211,7 @@ export class RiaComponent implements OnInit {
   }
 
   onOptionsChange(value) {
-    // this.currentCar.options = value;
-    // console.log('Car options:' , this.currentCar.options);
+    // this.currentCar.allOptions = value;
+    // console.log('Car allOptions:' , this.currentCar.allOptions);
   }
 }

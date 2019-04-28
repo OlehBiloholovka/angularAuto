@@ -1,7 +1,6 @@
 <div class="album py-5">
   <div class="container">
     <div class="row">
-
       <div class="col-md-4" *ngFor="let car of carList | async">
         <div class="card mb-4 shadow-sm">
           <img *ngIf="car.photoURLs" [src]="car.photoURLs[0]" height="auto" width="100%" alt="carPhoto">

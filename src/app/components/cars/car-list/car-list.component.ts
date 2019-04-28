@@ -5,7 +5,6 @@ import { ToastrService } from 'ngx-toastr';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../../core/auth.service';
 import {Observable} from 'rxjs';
-import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
 import {map} from 'rxjs/operators';
 
 @Component({

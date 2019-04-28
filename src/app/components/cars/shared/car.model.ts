@@ -14,5 +14,5 @@ export class Car {
   region: Region = new Region();
   category: Category = new Category();
   photoURLs?: string[] = [];
-  options: any[] = [];
+  options: RiaItem[] = [];
 }

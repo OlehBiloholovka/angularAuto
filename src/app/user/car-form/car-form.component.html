@@ -212,46 +212,20 @@
     </div>
     <hr>
 
-    <div [hidden]="!currentCar.category.id">
+    <div [hidden]="!currentCar.category.id" *ngIf="allOptions">
       <label for="options">Other options</label>
       <app-checkbox-group
-        (toggle)="onOptionsChange($event)"
-        [options]="carOptions"
+        [options]="allOptions | async"
         [selectedValues]="currentCar.category.options"
+        (toggle)="onOptionsChange($event)"
         id="options">
       </app-checkbox-group>
     </div>
-
 
     <div class="form-group">
       <br>
       <button class="btn btn-success mr-2" type="submit" [disabled]="!carForm.valid">Submit</button>
       <button class="btn btn-danger" type="button" (click)="onResetForm(carForm)">Reset</button>
     </div>
-
-
-<!--    <label for="driverType">Driver Type</label>-->
-<!--    <select class="form-control" id="driverType" [(ngModel)]="selectedDriverType">-->
-<!--      <option></option>-->
-<!--      <option *ngFor="let driverType of driverTypes" [value]="driverType.value">{{driverType.name}}</option>-->
-<!--    </select>-->
-
-
-<!--    <label for="option">Options</label>-->
-<!--    <select class="form-control" id="option" [(ngModel)]="selectedOptionID">-->
-<!--      <option></option>-->
-<!--      <option *ngFor="let option of options" [value]="option.value">{{option.name}}</option>-->
-<!--    </select>-->
-<!--    <label for="color">Colors</label>-->
-<!--    <select class="form-control" id="color" [(ngModel)]="selectedColorID">-->
-<!--      <option></option>-->
-<!--      <option *ngFor="let color of colors" [value]="color.value">{{color.name}}</option>-->
-<!--    </select>-->
-<!--    <label for="country">Country</label>-->
-<!--    <select class="form-control" id="country" [(ngModel)]="selectedCountryID">-->
-<!--      <option></option>-->
-<!--      <option *ngFor="let country of countries" [value]="country.value">{{country.name}}</option>-->
-<!--    </select>-->
-
   </form>
 </div>

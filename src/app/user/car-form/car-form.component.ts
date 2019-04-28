@@ -12,6 +12,7 @@ import {Region} from '../../components/cars/shared/region.model';
 import {RiaItem} from '../../components/cars/shared/ria-item.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from '../../core/auth.service';
+import {Observable, of} from 'rxjs';
 
 @Component({
   selector: 'app-car-form',
@@ -19,8 +20,6 @@ import {AuthService} from '../../core/auth.service';
   styleUrls: ['./car-form.component.css']
 })
 export class CarFormComponent implements OnInit {
-  @ViewChild('photoInput')
-  photoInput: ElementRef;
 
   constructor(private autoRiaService: AutoRiaService,
               private carService: CarService,
@@ -28,9 +27,11 @@ export class CarFormComponent implements OnInit {
               private router: Router,
               private authService: AuthService,
               private toastService: ToastrService) { }
+  @ViewChild('photoInput')
+  photoInput: ElementRef;
   public currentCar: Car;
 // Form variables
-  carOptions = new Array<CheckboxItem>();
+  allOptions: Observable<CheckboxItem[]>;
 
 // main params
   categories: MainParameter[];
@@ -54,9 +55,13 @@ export class CarFormComponent implements OnInit {
     return elementId === id;
   }
 
+  private static handleError(error: any) {
+    console.log(error);
+  }
+
   ngOnInit() {
     if (!this.authService.isLoggedIn) {
-      this.router.navigate(['/login']).catch(console.log);
+      this.router.navigate(['/login']).catch(CarFormComponent.handleError);
     }
     this.currentCar = this.carService.selectedCar;
     this.carService.getAllCars();
@@ -69,7 +74,7 @@ export class CarFormComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (!params.isEdit) {
         this.onResetForm();
-      } else {
+      } else if (this.currentCar.key) {
         this.getMakes();
         this.getBodyStyles();
         this.getGearboxes();
@@ -86,7 +91,7 @@ export class CarFormComponent implements OnInit {
       .getCategories()
       .subscribe(resp => {
         this.categories = resp;
-    }, error => console.log(error));
+    }, CarFormComponent.handleError);
   }
 
   private getBodyStyles() {
@@ -94,7 +99,7 @@ export class CarFormComponent implements OnInit {
       .getBodyStyles(this.currentCar.category.id)
       .subscribe(resp => {
         this.bodyStyles = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getDriverTypes() {
@@ -102,7 +107,7 @@ export class CarFormComponent implements OnInit {
       .getDriverTypes(this.currentCar.category.id)
       .subscribe(resp => {
         this.driverTypes = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getEngineTypes() {
@@ -110,7 +115,7 @@ export class CarFormComponent implements OnInit {
       .getEngineTypes()
       .subscribe(resp => {
         this.engineTypes = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getGearboxes() {
@@ -118,7 +123,7 @@ export class CarFormComponent implements OnInit {
       .getGearboxes(this.currentCar.category.id)
       .subscribe(resp => {
         this.gearboxes = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getOptions() {
@@ -126,8 +131,8 @@ export class CarFormComponent implements OnInit {
       .getOptions(this.currentCar.category.id)
       .subscribe(resp => {
         this.options = resp;
-        this.carOptions = resp.map(opt => new CheckboxItem(opt.value, opt.name));
-      }, error => console.log(error));
+        this.allOptions = of(resp.map(opt => new CheckboxItem(opt.value, opt.name)));
+      }, CarFormComponent.handleError);
   }
 
   private getColors() {
@@ -135,7 +140,7 @@ export class CarFormComponent implements OnInit {
       .getColors()
       .subscribe(resp => {
         this.colors = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getCountries() {
@@ -143,7 +148,7 @@ export class CarFormComponent implements OnInit {
       .getCountries()
       .subscribe(resp => {
         this.countries = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getRegions() {
@@ -151,7 +156,7 @@ export class CarFormComponent implements OnInit {
       .getStates()
       .subscribe(resp => {
         this.regions = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getCities() {
@@ -159,7 +164,7 @@ export class CarFormComponent implements OnInit {
       .getCities(this.currentCar.region.id)
       .subscribe(resp => {
         this.cities = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
 // Other params methods
@@ -168,7 +173,7 @@ export class CarFormComponent implements OnInit {
       .getMakes(this.currentCar.category.id)
       .subscribe(resp => {
         this.makes = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   private getModels() {
@@ -176,7 +181,7 @@ export class CarFormComponent implements OnInit {
       .getModels(this.currentCar.category.id, this.currentCar.category.make.id)
       .subscribe(resp => {
         this.models = resp;
-      }, error => console.log(error));
+      }, CarFormComponent.handleError);
   }
 
   onChangeCategory(event: any) {
@@ -191,10 +196,14 @@ export class CarFormComponent implements OnInit {
   }
 
   onChangeMake(event: any) {
-    const make: Make = new Make();
-    make.id = Number.parseInt(event, 10);
-    this.currentCar.category.make = make;
-    this.getModels();
+    if (event) {
+      const make: Make = new Make();
+      make.id = Number.parseInt(event, 10);
+      this.currentCar.category.make = make;
+      this.getModels();
+    } else {
+      return;
+    }
   }
 
   onChangeModel(event: any) {
@@ -244,8 +253,8 @@ export class CarFormComponent implements OnInit {
     } else {
       this.carService.updateCar(this.currentCar.key, this.currentCar);
     }
-    this.onResetForm(carForm);
     this.toastService.success('Submitted Successfully', 'Car Register');
+    this.onResetForm(carForm);
   }
 
   onResetForm(carForm?: NgForm) {
