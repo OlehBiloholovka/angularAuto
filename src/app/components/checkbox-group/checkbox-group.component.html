@@ -1,0 +1,8 @@
+<div class="row">
+  <div *ngFor="let opt of options" class="form-check col-md-3" >
+    <input class="form-check-input" type="checkbox" [(ngModel)]="opt.checked" id="cb1" (change)="onToggle()">
+    <label class="form-check-label" for="cb1">
+      {{opt.label}}
+    </label>
+  </div>
+</div>

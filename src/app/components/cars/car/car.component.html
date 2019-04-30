@@ -12,7 +12,7 @@
 </div>
 <br>
 <form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" class="form-group">
-  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().$key" >
+  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().key" >
   <input type="hidden" class="form-control" name="photoURLs" #photoURLs="ngModel" [(ngModel)]="onGetSelectedCar().photoURLs" >
   <input type="hidden" class="form-control" name="userID" #userID="ngModel" [(ngModel)]="onGetSelectedCar().userID" >
   <div class="from-group row">
@@ -71,7 +71,7 @@
   </div>
   <!--<div class="from-group">-->
     <!--<label>Options</label>-->
-    <!--<input class="form-control" name="options" #options="ngModel" [(ngModel)]="carService.options" placeholder="Option">-->
+    <!--<input class="form-control" name="allOptions" #allOptions="ngModel" [(ngModel)]="carService.allOptions" placeholder="Option">-->
   <!--</div>-->
   <div class="form-group">
     <br>
