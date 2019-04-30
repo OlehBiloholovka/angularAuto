@@ -16,8 +16,8 @@
             </h5>
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <small class="font-weight-light font-italic">
-                  {{car.capacity}} {{car.engineType.label}}
+                <small class="font-weight-light font-italic pr-1">
+                  {{car.capacity}} <span *ngIf="car.engineType">{{car.engineType.label}}</span>
                 </small>
                 <small class="badge badge-primary text-wrap">{{car.year}}</small>
                 <br>

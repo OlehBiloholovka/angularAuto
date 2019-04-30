@@ -54,7 +54,7 @@ export class CarListComponent implements OnInit {
   }
 
   onEdit(car: Car) {
-    this.carService.selectedCar = Object.assign({}, car);
+    this.carService.setCurrentCar(Object.assign({}, car));
     this.router.navigate(['user/form'], {queryParams: {isEdit: true}}).catch(console.log);
   }
 

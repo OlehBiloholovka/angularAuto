@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {AutoRiaService} from '../../components/cars/shared/auto-ria/auto-ria.service';
 import {MainParameter} from '../../components/cars/shared/auto-ria/main-parameter.model';
 import {CheckboxItem} from '../../components/checkbox-group/shared/checkbox-item.model';
@@ -19,14 +19,16 @@ import {Observable, of} from 'rxjs';
   templateUrl: './car-form.component.html',
   styleUrls: ['./car-form.component.css']
 })
-export class CarFormComponent implements OnInit {
+export class CarFormComponent implements OnInit, OnDestroy {
+  public photoUrl: Observable<string | null>;
 
   constructor(private autoRiaService: AutoRiaService,
               private carService: CarService,
               private route: ActivatedRoute,
               private router: Router,
               private authService: AuthService,
-              private toastService: ToastrService) { }
+              private toastService: ToastrService) {
+  }
   @ViewChild('photoInput')
   photoInput: ElementRef;
   public currentCar: Car;
@@ -51,8 +53,8 @@ export class CarFormComponent implements OnInit {
   models: MainParameter[];
   years: number[] = [];
 
-  static isThisElement(elementId: number, id: number) {
-    return elementId === id;
+  static isThisElement(elementId: number, id: any) {
+    return elementId === Number.parseInt(id, 10);
   }
 
   private static handleError(error: any) {
@@ -63,7 +65,29 @@ export class CarFormComponent implements OnInit {
     if (!this.authService.isLoggedIn) {
       this.router.navigate(['/login']).catch(CarFormComponent.handleError);
     }
-    this.currentCar = this.carService.selectedCar;
+    this.carService
+      .getCurrentCar()
+      .subscribe(value => {
+        this.currentCar = value;
+        if (!this.currentCar.category.gearBox) {
+          this.currentCar.category.gearBox = new RiaItem();
+        }
+        if (!this.currentCar.engineType) {
+          this.currentCar.engineType = new RiaItem();
+        }
+        if (!this.currentCar.category.driverType) {
+          this.currentCar.category.driverType = new RiaItem();
+        }
+        if (!this.currentCar.color) {
+          this.currentCar.color = new RiaItem();
+        }
+      });
+    // TO change !!!!
+    if (this.currentCar.photoURLs && this.currentCar.photoURLs[0]) {
+      this.carService.setPhotoUrl(this.currentCar.photoURLs[0]);
+    }
+    //
+    this.photoUrl = this.carService.getPhotoUrl();
     this.carService.getAllCars();
     this.getYears();
     this.getCategories();
@@ -214,7 +238,8 @@ export class CarFormComponent implements OnInit {
 
   onChangeEngineType(event: any) {
     const engineType: RiaItem = new RiaItem();
-    engineType.id = Number.parseInt(event, 10);
+    // engineType.id = Number.parseInt(event, 10);
+    engineType.id = event;
     this.currentCar.engineType = engineType;
   }
 
@@ -246,8 +271,10 @@ export class CarFormComponent implements OnInit {
       .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.category.make.id)).name;
     this.currentCar.category.make.model.label = this.models
       .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.category.make.model.id)).name;
-    this.currentCar.engineType.label = this.engineTypes
-      .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.engineType.id)).name;
+    if (this.currentCar.engineType && this.currentCar.engineType.id) {
+      this.currentCar.engineType.label = this.engineTypes
+        .find(value =>  CarFormComponent.isThisElement(value.value, this.currentCar.engineType.id)).name;
+    }
     if (carForm.value.key == null) {
       this.carService.createCar(this.currentCar);
     } else {
@@ -255,6 +282,7 @@ export class CarFormComponent implements OnInit {
     }
     this.toastService.success('Submitted Successfully', 'Car Register');
     this.onResetForm(carForm);
+    this.router.navigate(['user/' + this.carService.userID + '/cars']).catch(CarFormComponent.handleError);
   }
 
   onResetForm(carForm?: NgForm) {
@@ -264,20 +292,19 @@ export class CarFormComponent implements OnInit {
 
     this.photoInput.nativeElement.value = '';
     this.carService.uploadPercent = undefined;
-    this.carService.photoUrl = undefined;
-
-    this.carService.selectedCar = new Car();
+    this.carService.setPhotoUrl();
+    this.carService.setCurrentCar();
   }
 
   onPhotoUpload(event) {
     this.carService.uploadPhoto(event);
   }
 
-  onGetUploadURL() {
-    return this.carService.photoUrl;
-  }
-
   onGetUploadPercent() {
     return this.carService.uploadPercent;
+  }
+
+  ngOnDestroy(): void {
+    this.carService.setCurrentCar();
   }
 }

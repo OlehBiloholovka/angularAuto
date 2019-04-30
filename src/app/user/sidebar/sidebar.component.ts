@@ -15,5 +15,4 @@ export class SidebarComponent implements OnInit {
   getUserID(): string {
     return localStorage.getItem('userID');
   }
-
 }

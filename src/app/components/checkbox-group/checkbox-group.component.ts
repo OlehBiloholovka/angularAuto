@@ -15,13 +15,15 @@ export class CheckboxGroupComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.selectedValues.forEach(value => {
-      const element = this.options
-        .find(x => Number.parseInt(x.value, 10) === value.id);
-      if (element) {
-        element.checked = true;
-      }
-    });
+    if (this.selectedValues) {
+      this.selectedValues.forEach(value => {
+        const element = this.options
+          .find(x => Number.parseInt(x.value, 10) === value.id);
+        if (element) {
+          element.checked = true;
+        }
+      });
+    }
   }
 
   onToggle() {
