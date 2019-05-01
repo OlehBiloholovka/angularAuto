@@ -14,16 +14,15 @@
                 {{car.category.make.model.label}}
               </span>
             </h5>
+            <div class="d-flex justify-content-between align-middle">
+              <small class="font-weight-light font-italic pr-1">
+                {{car.capacity}} <span *ngIf="car.engineType">{{car.engineType.label}}</span>
+              </small>
+              <small class="badge badge-primary text-wrap">{{car.year}}</small>
+            </div>
             <div class="d-flex justify-content-between align-items-center">
-              <div>
-                <small class="font-weight-light font-italic pr-1">
-                  {{car.capacity}} <span *ngIf="car.engineType">{{car.engineType.label}}</span>
-                </small>
-                <small class="badge badge-primary text-wrap">{{car.year}}</small>
-                <br>
-                <p class="text-muted">{{car.mileage}} km</p>
-              </div>
-              <h3 class="text-success">$ {{car.price}}</h3>
+              <p class="text-muted my-auto">{{car.mileage}} km</p>
+              <h3 class="text-success my-auto">$ {{car.price}}</h3>
             </div>
             <div class="btn-group" *ngIf="id && isUserCar(car.userID)">
               <button type="button" class="btn btn-sm btn-outline-success" (click)="onEdit(car)">edit</button>

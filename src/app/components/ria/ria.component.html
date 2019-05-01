@@ -1,92 +1,92 @@
-<div class="container">
-  <div class="form-group">
-    <label for="options">Options</label>
-    <app-checkbox-group
-      [options]="carOptions"
-      [selectedValues]="currentCar.options"
-      id="options"
-      (toggle)="onOptionsChange($event)">
-    </app-checkbox-group>
-    <br>
-    <label for="category">Category</label>
-    <select class="form-control" id="category" [(ngModel)]="selectedCategoryID" (ngModelChange)="onChangeCategory()">
-      <option></option>
-      <option *ngFor="let category of categories" [value]="category.value">{{category.name}}</option>
-    </select>
-    <label for="bodyStyle">Body Style</label>
-    <select class="form-control" id="bodyStyle" [(ngModel)]="selectedBodyStyleID">
-      <option></option>
-      <option *ngFor="let bodyStyle of bodyStyles" [value]="bodyStyle.value">{{bodyStyle.name}}</option>
-    </select>
-    <label for="driverType">Driver Type</label>
-    <select class="form-control" id="driverType" [(ngModel)]="selectedDriverType">
-      <option></option>
-      <option *ngFor="let driverType of driverTypes" [value]="driverType.value">{{driverType.name}}</option>
-    </select>
-    <label for="engineType">Engine Type</label>
-    <select class="form-control" id="engineType" [(ngModel)]="selectedEngineType">
-      <option></option>
-      <option *ngFor="let engineType of engineTypes" [value]="engineType.value">{{engineType.name}}</option>
-    </select>
-    <label for="gearbox">Gearbox</label>
-    <select class="form-control" id="gearbox" [(ngModel)]="selectedGearboxID">
-      <option></option>
-      <option *ngFor="let gearbox of gearboxes" [value]="gearbox.value">{{gearbox.name}}</option>
-    </select>
-    <label for="option">Options</label>
-    <select class="form-control" id="option" [(ngModel)]="selectedOptionID">
-      <option></option>
-      <option *ngFor="let option of options" [value]="option.value">{{option.name}}</option>
-    </select>
-    <label for="color">Colors</label>
-    <select class="form-control" id="color" [(ngModel)]="selectedColorID">
-      <option></option>
-      <option *ngFor="let color of colors" [value]="color.value">{{color.name}}</option>
-    </select>
-    <label for="country">Country</label>
-    <select class="form-control" id="country" [(ngModel)]="selectedCountryID">
-      <option></option>
-      <option *ngFor="let country of countries" [value]="country.value">{{country.name}}</option>
-    </select>
-    <label for="state">State</label>
-    <select class="form-control" id="state" [(ngModel)]="selectedStateID" (ngModelChange)="onChangeState()">
-      <option></option>
-      <option *ngFor="let state of states" [value]="state.value">{{state.name}}</option>
-    </select>
-    <label for="city">City</label>
-    <select class="form-control" id="city" [(ngModel)]="selectedCityID">
-      <option></option>
-      <option *ngFor="let city of cities" [value]="city.value">{{city.name}}</option>
-    </select>
-    <label for="make">Make</label>
-    <select class="form-control" id="make" [(ngModel)]="selectedMakeID" (ngModelChange)="getModels()">
-      <option></option>
-      <option  *ngFor="let make of makes" [value]="make.marka_id">{{make.name}}</option>
-    </select>
-    <label for="model">Model</label>
-    <select class="form-control" id="model" [(ngModel)]="selectedModelID" (ngModelChange)="getGenerations()">
-      <option></option>
-      <option  *ngFor="let model of models" [value]="model.model_id">{{model.name}}</option>
-    </select>
-    <label for="generation">Generation</label>
-    <select class="form-control" id="generation" [(ngModel)]="selectedGenerationID" (ngModelChange)="getGenerationBodystyles()">
-      <option></option>
-      <option  *ngFor="let generation of generations" [value]="generation.generation_id">{{generation.name}}</option>
-    </select>
-    <label for="generationBodyStyle">GenerationBodyStyle</label>
-    <select class="form-control" id="generationBodyStyle" [(ngModel)]="selectedGenerationBodyStyleID" (ngModelChange)="getModifications()">
-      <option></option>
-      <option *ngFor="let generationBodyStyle of generationBodyStyles" [value]="generationBodyStyle.generation_bodystyle_id">{{generationBodyStyle.bodystyle_id}}</option>
-    </select>
-    <label for="modification">Modification</label>
-    <select class="form-control" id="modification" [(ngModel)]="selectedModificationID" (ngModelChange)="getEquips()">
-      <option></option>
-      <option  *ngFor="let modification of modifications" [value]="modification.base_id">{{modification.name}}</option>
-    </select>
-    <label for="equip">Equip</label>
-    <select class="form-control" id="equip" [(ngModel)]="selectedEquipID">
-      <option></option>
-      <option  *ngFor="let equip of equips" [value]="equip.equip_id">{{equip.equip_id}}</option>
-    </select>
-  </div>
-</div>
+<!--<div class="container">-->
+<!--  <div class="form-group">-->
+<!--    <label for="options">Options</label>-->
+<!--    <app-checkbox-group-->
+<!--      [options]="carOptions"-->
+<!--      [selectedValues]="currentCar.options"-->
+<!--      id="options"-->
+<!--      (toggle)="onOptionsChange($event)">-->
+<!--    </app-checkbox-group>-->
+<!--    <br>-->
+<!--    <label for="category">Category</label>-->
+<!--    <select class="form-control" id="category" [(ngModel)]="selectedCategoryID" (ngModelChange)="onChangeCategory()">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let category of categories" [value]="category.value">{{category.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="bodyStyle">Body Style</label>-->
+<!--    <select class="form-control" id="bodyStyle" [(ngModel)]="selectedBodyStyleID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let bodyStyle of bodyStyles" [value]="bodyStyle.value">{{bodyStyle.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="driverType">Driver Type</label>-->
+<!--    <select class="form-control" id="driverType" [(ngModel)]="selectedDriverType">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let driverType of driverTypes" [value]="driverType.value">{{driverType.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="engineType">Engine Type</label>-->
+<!--    <select class="form-control" id="engineType" [(ngModel)]="selectedEngineType">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let engineType of engineTypes" [value]="engineType.value">{{engineType.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="gearbox">Gearbox</label>-->
+<!--    <select class="form-control" id="gearbox" [(ngModel)]="selectedGearboxID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let gearbox of gearboxes" [value]="gearbox.value">{{gearbox.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="option">Options</label>-->
+<!--    <select class="form-control" id="option" [(ngModel)]="selectedOptionID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let option of options" [value]="option.value">{{option.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="color">Colors</label>-->
+<!--    <select class="form-control" id="color" [(ngModel)]="selectedColorID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let color of colors" [value]="color.value">{{color.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="country">Country</label>-->
+<!--    <select class="form-control" id="country" [(ngModel)]="selectedCountryID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let country of countries" [value]="country.value">{{country.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="state">State</label>-->
+<!--    <select class="form-control" id="state" [(ngModel)]="selectedStateID" (ngModelChange)="onChangeState()">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let state of states" [value]="state.value">{{state.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="city">City</label>-->
+<!--    <select class="form-control" id="city" [(ngModel)]="selectedCityID">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let city of cities" [value]="city.value">{{city.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="make">Make</label>-->
+<!--    <select class="form-control" id="make" [(ngModel)]="selectedMakeID" (ngModelChange)="getModels()">-->
+<!--      <option></option>-->
+<!--      <option  *ngFor="let make of makes" [value]="make.marka_id">{{make.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="model">Model</label>-->
+<!--    <select class="form-control" id="model" [(ngModel)]="selectedModelID" (ngModelChange)="getGenerations()">-->
+<!--      <option></option>-->
+<!--      <option  *ngFor="let model of models" [value]="model.model_id">{{model.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="generation">Generation</label>-->
+<!--    <select class="form-control" id="generation" [(ngModel)]="selectedGenerationID" (ngModelChange)="getGenerationBodystyles()">-->
+<!--      <option></option>-->
+<!--      <option  *ngFor="let generation of generations" [value]="generation.generation_id">{{generation.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="generationBodyStyle">GenerationBodyStyle</label>-->
+<!--    <select class="form-control" id="generationBodyStyle" [(ngModel)]="selectedGenerationBodyStyleID" (ngModelChange)="getModifications()">-->
+<!--      <option></option>-->
+<!--      <option *ngFor="let generationBodyStyle of generationBodyStyles" [value]="generationBodyStyle.generation_bodystyle_id">{{generationBodyStyle.bodystyle_id}}</option>-->
+<!--    </select>-->
+<!--    <label for="modification">Modification</label>-->
+<!--    <select class="form-control" id="modification" [(ngModel)]="selectedModificationID" (ngModelChange)="getEquips()">-->
+<!--      <option></option>-->
+<!--      <option  *ngFor="let modification of modifications" [value]="modification.base_id">{{modification.name}}</option>-->
+<!--    </select>-->
+<!--    <label for="equip">Equip</label>-->
+<!--    <select class="form-control" id="equip" [(ngModel)]="selectedEquipID">-->
+<!--      <option></option>-->
+<!--      <option  *ngFor="let equip of equips" [value]="equip.equip_id">{{equip.equip_id}}</option>-->
+<!--    </select>-->
+<!--  </div>-->
+<!--</div>-->
