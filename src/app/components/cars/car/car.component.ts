@@ -1,9 +1,7 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { CarService } from '../shared/car.service';
-import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { Car } from '../shared/car.model';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
 import {AuthService} from '../../../core/auth.service';
 
 @Component({
@@ -13,72 +11,31 @@ import {AuthService} from '../../../core/auth.service';
 })
 export class CarComponent implements OnInit {
   carName: string;
-  constructor(private carService: CarService) { }
+  isUserCar: boolean;
+  carId: string;
+  constructor(private carService: CarService,
+              private toastr: ToastrService,
+              private router: Router) { }
 
   ngOnInit(): void {
     this.carService.getCurrentCar()
       .subscribe(value => {
+        this.carId = value.key;
         if (value.category.make.label) {
-          console.log();
           this.carName = value.category.make.label + ' ' + value.category.make.model.label;
+        }
+        if (!AuthService.isSignOut()) {
+          this.isUserCar = value.userID === AuthService.getUserId();
         }
       });
   }
-  // @ViewChild('photoInput')
-  // photoInput: ElementRef;
-  // constructor(private carService: CarService,
-  //             private toastr: ToastrService,
-  //             private route: ActivatedRoute,
-  //             private router: Router,
-  //             private authService: AuthService) {
-  //   this.carService = carService;
-  //   this.authService = authService;
-  // }
-  //
-  // ngOnInit() {
-  //   // this.carService.getData();
-  //   this.carService.getAllCars();
-  //   this.route.queryParams.subscribe(params => {
-  //     if (!params.isEdit) {
-  //       this.onResetForm();
-  //     }
-  //   });
-  // }
-  //
-  // onPhotoUpload(event) {
-  //   this.carService.uploadPhoto(event);
-  // }
-  //
-  // onSubmit(carForm: NgForm) {
-  //   if (carForm.value.key == null) {
-  //     this.carService.createCar(this.carService.selectedCar);
-  //   } else {
-  //     this.carService.updateCar(this.carService.selectedCar.key, this.carService.selectedCar);
-  //   }
-  //   this.onResetForm(carForm);
-  //   this.toastr.success('Submitted Successfully', 'Car Register');
-  // }
-  //
-  // onResetForm(carForm?: NgForm) {
-  //   if (carForm != null) {
-  //     carForm.reset();
-  //   }
-  //
-  //   this.photoInput.nativeElement.value = '';
-  //   this.carService.uploadPercent = undefined;
-  //   this.carService.photoUrl = undefined;
-  //
-  //   this.carService.selectedCar = new Car();
-  // }
-  // onGetSelectedCar() {
-  //   return this.carService.selectedCar;
-  // }
-  //
-  // onGetUploadURL() {
-  //   return this.carService.photoUrl;
-  // }
-  //
-  // onGetUploadPercent() {
-  //   return this.carService.uploadPercent;
-  // }
+  onEdit() {
+    this.router.navigate(['user/form'], {queryParams: {isEdit: true}}).catch(console.log);
+  }
+  onDelete() {
+    if (confirm('Are sure to delete this record?') === true) {
+      this.carService.deleteCar(this.carId);
+      this.toastr.warning('Deleted Successfully', 'Car register');
+    }
+  }
 }

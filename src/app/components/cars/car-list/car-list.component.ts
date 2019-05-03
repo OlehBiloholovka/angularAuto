@@ -69,10 +69,9 @@ export class CarListComponent implements OnInit {
       .catch(console.log);
   }
 
-  isUserCar(userID: string) {
-    if (this.authService.isLoggedIn) {
-      return  userID === this.authService.user.uid ;
+  isUserCar(userID: string): boolean {
+    if (!AuthService.isSignOut()) {
+      return userID === AuthService.getUserId();
     }
-    return false;
   }
 }

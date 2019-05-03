@@ -3,13 +3,18 @@ import { User } from 'firebase';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
   user: User;
+  u: Observable<User>;
+
   constructor(public afAuth: AngularFireAuth, public router: Router) {
+    this.u = afAuth.authState;
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
@@ -22,10 +27,19 @@ export class AuthService {
     });
   }
 
+  static isSignOut(): boolean {
+    return !localStorage.getItem('user');
+  }
+
+  static getUserId(): string {
+    return localStorage.getItem('userID');
+  }
+
   async login(email: string, password: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-      this.router.navigate(['/cars']);
+      this.router.navigate(['/cars'])
+        .catch(console.log);
     } catch (e) {
       alert('Error!' + e.message);
     }
@@ -45,14 +59,5 @@ export class AuthService {
   async  loginWithFacebook() {
     await  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
     this.router.navigate(['/cars']);
-  }
-
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null;
-  }
-
-  getUserID(): string {
-    return this.user.uid;
   }
 }

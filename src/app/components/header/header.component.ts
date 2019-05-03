@@ -14,11 +14,11 @@ export class HeaderComponent implements OnInit {
   }
 
   get isLoggedIn(): boolean {
-    return this.authService.isLoggedIn;
+    return !AuthService.isSignOut();
   }
 
   onLogout() {
-    this.authService.logout();
+    this.authService.logout().catch(console.log);
   }
 
   getUserID(): string {
