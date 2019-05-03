@@ -1,16 +1,71 @@
-<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
-  <h2 class="my-0 mr-md-auto font-weight-bold text-success" routerLink="/cars">carUsell</h2>
-  <nav class="my-2 my-md-0 mr-md-3">
-    <a *ngIf="isLoggedIn" class="p-2 text-dark mr-3" href="#" [routerLink]="['user', getUserID(), 'cars']">My Cars</a>
-    <a class="btn btn-success mr-3" href="#" routerLink="user/form">
-      <i class="fas fa-plus mr-2"></i>
-      Sell your car
+<!--<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">-->
+<div class="d-flex flex-row align-items-center navbar-expand-md p-2 py-sm-3 px-sm-4 mb-3 bg-white border-bottom shadow-sm">
+  <button class="navbar-toggler border-success order-0" type="button" data-toggle="collapse" data-target="#myMenu" aria-controls="myMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <i class="fas fa-bars text-success"></i>
+  </button>
+
+  <a href="#" class="navbar-brand my-0 mx-auto ml-md-0 mr-md-auto p-0 order-1 order-sm-2 order-md-0" routerLink="/cars">
+    <span class="h2 font-weight-bold text-success">carUsell</span>
+  </a>
+
+  <a href="#" class="btn p-0 order-2 order-sm-1 ml-sm-2 ml-md-0">
+    <i *ngIf="true" class="fa-2x far fa-star text-warning"></i>
+    <i *ngIf="false" class="fa-2x fas fa-star text-warning"></i>
+  </a>
+
+  <div class="d-flex d-row order-3 order-md-2">
+    <a *ngIf="isLoggedIn" class="p-2 text-dark d-none d-md-block" href="#" [routerLink]="['user', getUserID(), 'cars']">My Cars</a>
+    <a class="btn p-0 d-flex flex-row align-items-center" href="#" routerLink="user/form">
+      <i class="fa-2x fas fa-plus text-success d-none d-sm-block d-md-none"></i>
+      <div class="btn btn-success group-form d-none d-md-block">
+        <i class="fas fa-plus mr-2"></i>Sell your car
+      </div>
     </a>
-  </nav>
-  <a class="btn btn-outline-primary" href="#"
-     *ngIf="!isLoggedIn"
-     routerLink="/login">Sign up</a>
-  <a class="btn btn-outline-danger" href="#"
-     *ngIf="isLoggedIn"
-     (click)="onLogout()">Logout</a>
+  </div>
+
+  <div class="d-none d-sm-block order-4 order-md-3 ml-sm-2">
+    <a href="#" class="btn p-0"
+       *ngIf="!isLoggedIn"
+       routerLink="/login">
+      <div class="btn btn-outline-primary d-none d-md-block">
+        Sign up
+      </div>
+      <i class="fa-2x fas fa-sign-in-alt text-primary d-block d-md-none"></i>
+    </a>
+    <a href="#" class="btn p-0"
+       *ngIf="isLoggedIn"
+       (click)="onLogout()">
+      <div class="d-none d-md-block btn btn-outline-danger">
+        Logout
+      </div>
+      <i class="fa-2x fas fa-sign-out-alt text-danger d-block d-md-none"></i>
+    </a>
+  </div>
 </div>
+<div class="collapse border-bottom shadow-sm d-md-none bg-light px-5" id="myMenu">
+  <div class="d-flex d-row justify-content-between">
+    <a *ngIf="isLoggedIn" class="p-2 text-dark" href="#" [routerLink]="['user', getUserID(), 'cars']">My Cars</a>
+    <a class="btn p-0 d-flex flex-row align-items-center d-sm-none" href="#" routerLink="user/form">
+      <div class="btn btn-success group-form">
+        <i class="fas fa-plus mr-2"></i>Sell your car
+      </div>
+    </a>
+    <div class="d-sm-none">
+      <a href="#" class="btn p-0"
+         *ngIf="!isLoggedIn"
+         routerLink="/login">
+        <div class="btn btn-outline-primary">
+          Sign up
+        </div>
+      </a>
+      <a href="#" class="btn p-0"
+         *ngIf="isLoggedIn"
+         (click)="onLogout()">
+        <div class="btn btn-outline-danger">
+          Logout
+        </div>
+      </a>
+    </div>
+  </div>
+</div>
+
