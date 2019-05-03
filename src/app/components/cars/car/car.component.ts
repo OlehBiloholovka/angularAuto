@@ -12,7 +12,17 @@ import {AuthService} from '../../../core/auth.service';
   styleUrls: ['./car.component.css']
 })
 export class CarComponent implements OnInit {
+  carName: string;
+  constructor(private carService: CarService) { }
+
   ngOnInit(): void {
+    this.carService.getCurrentCar()
+      .subscribe(value => {
+        if (value.category.make.label) {
+          console.log();
+          this.carName = value.category.make.label + ' ' + value.category.make.model.label;
+        }
+      });
   }
   // @ViewChild('photoInput')
   // photoInput: ElementRef;

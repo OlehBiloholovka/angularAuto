@@ -57,12 +57,16 @@ export class CarListComponent implements OnInit {
     this.carService.setCurrentCar(Object.assign({}, car));
     this.router.navigate(['user/form'], {queryParams: {isEdit: true}}).catch(console.log);
   }
-
   onDelete(key: string) {
     if (confirm('Are sure to delete this record?') === true) {
       this.carService.deleteCar(key);
       this.toastr.warning('Deleted Successfully', 'Car register');
     }
+  }
+  onOpenCarPage(car: Car) {
+    this.carService.setCurrentCar(Object.assign({}, car));
+    this.router.navigate(['user/car'])
+      .catch(console.log);
   }
 
   isUserCar(userID: string) {
