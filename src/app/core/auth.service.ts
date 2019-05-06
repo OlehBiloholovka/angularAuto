@@ -3,7 +3,6 @@ import { User } from 'firebase';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { Router } from '@angular/router';
-import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +10,8 @@ import {Observable} from 'rxjs';
 export class AuthService {
 
   user: User;
-  u: Observable<User>;
 
   constructor(public afAuth: AngularFireAuth, public router: Router) {
-    this.u = afAuth.authState;
     this.afAuth.authState.subscribe(user => {
       if (user) {
         this.user = user;
@@ -27,11 +24,12 @@ export class AuthService {
     });
   }
 
-  static isSignOut(): boolean {
-    return !localStorage.getItem('user');
+  public get isSignOut(): boolean {
+    // return localStorage.getItem('user') === null;
+    return  this.getUserId === null;
   }
 
-  static getUserId(): string {
+  public get getUserId(): string {
     return localStorage.getItem('userID');
   }
 

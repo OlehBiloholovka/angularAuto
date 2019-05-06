@@ -150,5 +150,7 @@ export class CarService {
       + '?alt=media&token=fb15f0f7-19c7-4340-8832-5b221400a826';
   }
 
-
+  // get isNewCar(): boolean {
+  //   return this.currentCar.key === undefined;
+  // }
 }

@@ -62,9 +62,10 @@ export class CarFormComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if (AuthService.isSignOut()) {
-      this.router.navigate(['/login']).catch(CarFormComponent.handleError);
-    }
+    // if (!this.isSignedIn) {
+    //   this.router.navigate(['/login']).catch(CarFormComponent.handleError);
+    //   return;
+    // }
     this.carService
       .getCurrentCar()
       .subscribe(value => {

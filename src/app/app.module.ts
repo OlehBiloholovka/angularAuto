@@ -31,11 +31,11 @@ const appRoutes: Routes = [
   {path: 'old', component: CarsComponent},
   {path: 'cars', component: CarListComponent},
   {path: 'login', component: UserLoginComponent},
+  {path: 'car', component: CarComponent},
   {path: 'user', component: UserComponent, children: [
       {path: 'form', component: CarFormComponent},
       {path: ':id/cars', component: CarListComponent},
-      {path: 'profile', component: UserProfileComponent},
-      {path: 'car', component: CarComponent}
+      {path: 'profile', component: UserProfileComponent}
     ]},
 
 ];
