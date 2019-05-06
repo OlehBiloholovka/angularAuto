@@ -45,30 +45,25 @@ export class CarListComponent implements OnInit {
             value.map(c => ({ key: c.payload.key, ...c.payload.val() }))
           )
         );
-
-    // this.carList
-    //   .forEach(cars => cars.forEach(car => {
-    //     car.category.make.label = this.autoRiaService.getNewMakes(car.category.id);
-    //   }))
-    //   .catch(console.log);
   }
 
   onEdit(car: Car) {
     this.carService.setCurrentCar(Object.assign({}, car));
     this.router.navigate(['user/form'], {queryParams: {isEdit: true}}).catch(console.log);
   }
-
   onDelete(key: string) {
     if (confirm('Are sure to delete this record?') === true) {
       this.carService.deleteCar(key);
       this.toastr.warning('Deleted Successfully', 'Car register');
     }
   }
+  onOpenCarPage(car: Car) {
+    this.carService.setCurrentCar(Object.assign({}, car));
+    this.router.navigate(['car'])
+      .catch(console.log);
+  }
 
-  isUserCar(userID: string) {
-    if (this.authService.isLoggedIn) {
-      return  userID === this.authService.user.uid ;
-    }
-    return false;
+  isUserCar(userID: string): boolean {
+    return userID === this.authService.getUserId;
   }
 }

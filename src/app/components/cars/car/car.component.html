@@ -1,81 +1,118 @@
-<!--<input #photoInput type="file" (change)="onPhotoUpload($event)" accept="image/*" />-->
-<!--<br>-->
-<!--<br>-->
-<!--<div class="col-6 px-0">-->
-<!--  <div *ngIf="onGetUploadPercent()" class="progress" >-->
-<!--    <div class="progress-bar progress-bar-striped progress-bar-animated"-->
-<!--         role="progressbar"-->
-<!--         [ngStyle]="{ 'width': (onGetUploadPercent() | async) + '%'}"-->
-<!--    >{{ (onGetUploadPercent() | async) | number }} %</div>-->
-<!--  </div>-->
-<!--  <img *ngIf="onGetUploadURL()" src="{{onGetUploadURL() | async}}" width="100%" alt="carPhoto"><br>-->
-<!--</div>-->
-<!--<br>-->
-<!--<form #carForm="ngForm" (ngSubmit)="onSubmit(carForm)" class="form-group">-->
-<!--  <input type="hidden" class="form-control" name="$key" #$key="ngModel" [(ngModel)]="onGetSelectedCar().key" >-->
-<!--  <input type="hidden" class="form-control" name="photoURLs" #photoURLs="ngModel" [(ngModel)]="onGetSelectedCar().photoURLs" >-->
-<!--  <input type="hidden" class="form-control" name="userID" #userID="ngModel" [(ngModel)]="onGetSelectedCar().userID" >-->
-<!--  <div class="from-group row">-->
-<!--    <label class="col-2 col-sm-2 col-form-label" for="name">Brand</label>-->
-<!--    <input id="name" class="col-4 col-sm-4 form-control" name="name" #name="ngModel" [(ngModel)]="onGetSelectedCar().name" placeholder="Name" required>-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  <div class="from-group row">-->
-<!--    <label for="model" class="col-2 col-sm-2 col-form-label">Model</label>-->
-<!--    <input id="model" class="col-4 col-sm-4 form-control" name="model" #model="ngModel" [(ngModel)]="onGetSelectedCar().model" placeholder="Model" required>-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  <div class="from-group row">-->
-<!--    <label for="year" class="col-2 col-sm-2 col-form-label">First Registration</label>-->
-<!--    <div class="col-4 col-sm-4 input-group px-0">-->
-<!--      <input id="year" class="form-control" name="year" #year="ngModel" [(ngModel)]="onGetSelectedCar().year" placeholder="Year" required>-->
-<!--      <div class="input-group-append">-->
-<!--        <span class="input-group-text">year</span>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  <div class="from-group row">-->
-<!--    <label for="mileage" class="col-2 col-sm-2 col-form-label">Mileage</label>-->
-<!--    <div class="col-4 col-sm-4 input-group px-0">-->
-<!--      <input id="mileage" class="form-control" name="mileage" #mileage="ngModel" [(ngModel)]="onGetSelectedCar().mileage" placeholder="Mileage" required>-->
-<!--      <div class="input-group-append">-->
-<!--        <span class="input-group-text">km</span>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  <div class="from-group row">-->
-<!--    <label for="engineType" class="col-2 col-sm-2 col-form-label">EngineType</label>-->
-<!--    <input id="engineType" class="col-4 col-sm-4 form-control" name="engineType" #engineType="ngModel" [(ngModel)]="onGetSelectedCar().engineType" placeholder="EngineType" required>-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  <div class="from-group row">-->
-<!--    <label for="engine" class="col-2 col-sm-2 col-form-label">Capacity</label>-->
-<!--    <div class="col-4 col-sm-4 input-group px-0">-->
-<!--      <input id="engine" class="form-control" name="engine" #engine="ngModel" [(ngModel)]="onGetSelectedCar().engine" placeholder="Engine" required>-->
-<!--      <div class="input-group-append">-->
-<!--        <span class="input-group-text">l</span>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <br>-->
-<!--  <div class="from-group row">-->
-<!--    <label for="price" class="col-2 col-sm-2 col-form-label">Price</label>-->
-<!--    <div class="col-4 col-sm-4 input-group px-0">-->
-<!--      <input id="price" class="form-control" name="price" #price="ngModel" [(ngModel)]="onGetSelectedCar().price" placeholder="Price" required>-->
-<!--      <div class="input-group-append">-->
-<!--        <span class="input-group-text">$</span>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  &lt;!&ndash;<div class="from-group">&ndash;&gt;-->
-<!--    &lt;!&ndash;<label>Options</label>&ndash;&gt;-->
-<!--    &lt;!&ndash;<input class="form-control" name="allOptions" #allOptions="ngModel" [(ngModel)]="carService.allOptions" placeholder="Option">&ndash;&gt;-->
-<!--  &lt;!&ndash;</div>&ndash;&gt;-->
-<!--  <div class="form-group">-->
-<!--    <br>-->
-<!--    <button class="btn btn-success mr-2" type="submit" [disabled]="!carForm.valid">Submit</button>-->
-<!--    <button class="btn btn-danger" type="button" (click)="onResetForm(carForm)">Reset</button>-->
-<!--  </div>-->
-<!--</form>-->
+<div *ngIf="carId !== undefined" class="d-flex flex-column pb-5">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-text font-weight-bold ">{{car.category.make.label}}
+            <span class="font-weight-normal">
+                {{car.category.make.model.label}}
+              </span>
+          </h5>
+          <div class="d-flex justify-content-between align-middle">
+            <small class="font-weight-light font-italic pr-1">
+              {{car.capacity}} <span *ngIf="car.engineType">{{car.engineType.label}}</span>
+            </small>
+            <small class="badge badge-primary text-wrap">{{car.year}}</small>
+          </div>
+          <div class="d-flex justify-content-between align-items-center">
+            <p class="text-muted my-auto">{{car.mileage}} km</p>
+            <h3 class="text-success my-auto">$ {{car.price}}</h3>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="d-flex flex-column">
+            <div class="d-flex flex-row">
+              <img *ngIf="userPhoto" class="img-fluid rounded-circle" style="width: 48px; height: 48px" [src]="userPhoto | async"  src="#" alt="userPhoto">
+              <div class="d-flex flex-column ml-2 justify-content-center">
+                <span class="h5 mb-0">{{userName | async}}</span>
+                <small><a href="mailto:{{userEmail | async}}">{{userEmail | async}}</a></small>
+              </div>
+            </div>
+            <a href="tel:+380" class="btn btn-block btn-success mt-2">+380 {{userPhone | async}}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div *ngIf="isUserCar" class="d-flex flex-row rounded-lg p-1 border border-warning justify-content-end mb-2" style="background-color: #FFFFCC">
+        <span class="mr-auto text-danger align-self-center">It`s your car!</span>
+        <div class="bg-white rounded-lg btn-group">
+          <button type="button" class="btn btn-sm btn-outline-success" (click)="onEdit()">edit</button>
+          <button type="button" class="btn btn-sm btn-outline-danger" (click)="onDelete()">delete</button>
+        </div>
+      </div>
+      <div class="col-md-9 px-0">
+        <img class="img-fluid" style="max-width: 100%; height: auto" [src]="car.photoURLs[0]" src="#" alt="carPhoto">
+      </div>
+    </div>
+  </div>
+  <hr class="mx-1">
+  <div>
+    <span class="h3">Main info</span>
+    <div class="row pt-2">
+      <div class="col-md-3">
+        <span>Category: </span>
+        <span>{{car.category.label}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Make: </span>
+        <span>{{car.category.make.label}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Model: </span>
+        <span>{{car.category.make.model.label}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Driver type: </span>
+        <span>{{car.category.driverType.label}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Gearbox: </span>
+        <span>{{car.category.gearBox.label}}</span>
+      </div><div class="col-md-3">
+      <span>Body style: </span>
+      <span>{{car.category.bodyStyle.label}}</span>
+    </div><div class="col-md-3">
+      <span>Engine type: </span>
+      <span>{{car.engineType.label}}</span>
+    </div>
+      <div class="col-md-3">
+        <span>Capacity: </span>
+        <span>{{car.capacity}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Mileage: </span>
+        <span>{{car.mileage}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Region: </span>
+        <span>{{car.region.label}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>City: </span>
+        <span>{{car.region.city.label}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Price: </span>
+        <span>{{car.price}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Year: </span>
+        <span>{{car.year}}</span>
+      </div>
+      <div class="col-md-3">
+        <span>Color: </span>
+        <span>{{car.color.label}}</span>
+      </div>
+    </div>
+  </div>
+  <hr class="mx-1">
+  <div>
+    <span class="h3">Options</span>
+    <div class="row pt-2">
+      <div *ngFor="let opt of car.category.options" class="col-md-3">
+        <i class="far fa-check-circle text-success pr-1"></i>
+        <span>{{opt.label}}</span>
+      </div>
+    </div>
+  </div>
+</div>

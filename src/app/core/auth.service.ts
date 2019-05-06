@@ -8,7 +8,9 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
+
   user: User;
+
   constructor(public afAuth: AngularFireAuth, public router: Router) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
@@ -22,10 +24,20 @@ export class AuthService {
     });
   }
 
+  public get isSignOut(): boolean {
+    // return localStorage.getItem('user') === null;
+    return  this.getUserId === null;
+  }
+
+  public get getUserId(): string {
+    return localStorage.getItem('userID');
+  }
+
   async login(email: string, password: string) {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-      this.router.navigate(['/cars']);
+      this.router.navigate(['/cars'])
+        .catch(console.log);
     } catch (e) {
       alert('Error!' + e.message);
     }
@@ -45,14 +57,5 @@ export class AuthService {
   async  loginWithFacebook() {
     await  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
     this.router.navigate(['/cars']);
-  }
-
-  get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null;
-  }
-
-  getUserID(): string {
-    return this.user.uid;
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {AngularFireDatabase, AngularFireList, AngularFireObject} from '@angular/fire/database';
 import { Car } from './car.model';
-import {finalize, map} from 'rxjs/operators';
-import {AngularFireStorage, AngularFireStorageReference} from '@angular/fire/storage';
+import {finalize} from 'rxjs/operators';
+import {AngularFireStorage} from '@angular/fire/storage';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
@@ -149,4 +149,8 @@ export class CarService {
     return 'https://firebasestorage.googleapis.com/v0/b/angularauto.appspot.com/o/carThumbnail%2F13-car-integratedpieces.png'
       + '?alt=media&token=fb15f0f7-19c7-4340-8832-5b221400a826';
   }
+
+  // get isNewCar(): boolean {
+  //   return this.currentCar.key === undefined;
+  // }
 }
