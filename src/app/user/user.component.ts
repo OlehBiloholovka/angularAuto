@@ -14,7 +14,7 @@ export class UserComponent implements OnInit {
   ngOnInit() {
     if (!this.isSignedIn) {
       this.router.navigate(['/login']).catch(console.log);
-      return;
+      // return;
     }
   }
   get isSignedIn(): boolean {
