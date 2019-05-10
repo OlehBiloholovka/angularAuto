@@ -1,6 +1,54 @@
-<p>
-  user-profile works!
-</p>
-<!--<button (click)="onGenerateLocations('ua')">Generate locations UA</button>-->
-<!--<button (click)="onGenerateLocations('en')">Generate locations EN</button>-->
-<!--<button (click)="onGenerateLocations('ru')">Generate locations RU</button>-->
+<div class="col-sm-7 mx-auto mb-3 bg-light shadow-sm rounded-lg">
+  <form *ngIf="currentUser | async as user"
+        #userForm="ngForm"
+        (ngSubmit)="onSubmit(userForm)"
+        class="was-validated p-3">
+    <img class="form-group img-fluid rounded-circle mx-auto d-block" style="width: 200px; height: 200px;" [src]="user.photoURL"  src="#" alt="userPhoto">
+    <div class="form-group h3 d-flex justify-content-center">My Profile</div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="name">Name:</label>
+      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.displayName}}</span>
+      <input *ngIf="isEdit" [(ngModel)]="user.displayName"
+             class="col-sm-8"
+             id="name"
+             placeholder="Name"
+             name="displayName"
+             type="text" required>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="phone">Phone:</label>
+      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.phone}}</span>
+      <input *ngIf="isEdit" [(ngModel)]="user.phone"
+             class="col-sm-8"
+             id="phone"
+             placeholder="Phone"
+             name="phone"
+             type="tel" required>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label" for="email">Email:</label>
+      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.email}}</span>
+      <input *ngIf="isEdit" [(ngModel)]="user.email"
+             class="col-sm-8"
+             id="email"
+             placeholder="Email"
+             name="email"
+             type="email" required>
+    </div>
+    <div class="form-group row">
+      <label  class="col-sm-4 col-form-label" for="password">Password:</label>
+      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.password}}</span>
+      <input *ngIf="isEdit" [(ngModel)]="user.password"
+             class="col-sm-8"
+             id="password"
+             placeholder="Password"
+             name="password"
+             type="password" required>
+    </div>
+    <div class="form-group mb-0">
+      <button *ngIf="!isEdit" class="btn btn-outline-success mr-2" type="button" (click)="onUserEdit()">Edit</button>
+      <button *ngIf="isEdit" class="btn btn-success mr-2" type="submit" [disabled]="!userForm.valid">Submit</button>
+      <button *ngIf="isEdit" class="btn btn-danger" type="button" (click)="onCancelForm(userForm)">Cancel</button>
+    </div>
+  </form>
+</div>

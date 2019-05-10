@@ -2,6 +2,10 @@ import {Component, OnInit} from '@angular/core';
 import {LocationService} from '../../../core/location.service';
 import {AutoRiaService, Language} from '../../cars/shared/auto-ria/auto-ria.service';
 import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../../core/auth.service';
+import {User} from '../../../core/user.model';
+import {Observable} from 'rxjs';
+import {NgForm} from '@angular/forms';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,8 +14,11 @@ import {ToastrService} from 'ngx-toastr';
 })
 
 export class UserProfileComponent implements OnInit {
+  currentUser: Observable<User>;
+  isEdit: boolean;
 
-  constructor(private locationService: LocationService,
+  constructor(private authService: AuthService,
+              private locationService: LocationService,
               private autoRiaService: AutoRiaService,
               private toastService: ToastrService) { }
 
@@ -24,6 +31,7 @@ export class UserProfileComponent implements OnInit {
     //       this.locationService.setRegions(value);
     //     });
     //   }, error => console.log(error));
+    this.currentUser = this.authService.currentUser;
   }
 
   onGenerateLocations(lang: string) {
@@ -43,5 +51,17 @@ export class UserProfileComponent implements OnInit {
     this.locationService.setRegions(language);
     // this.locationService.setOther();
     this.toastService.success('Submitted Successfully', 'Car Register');
+  }
+
+  onSubmit(carForm: NgForm) {
+    this.onUserEdit();
+  }
+
+  onCancelForm(carForm: NgForm) {
+    this.onUserEdit();
+  }
+
+  onUserEdit() {
+    this.isEdit = !this.isEdit;
   }
 }

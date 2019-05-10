@@ -20,7 +20,11 @@ export class UserLoginComponent implements OnInit {
 
 
   onLoginWithGoogle() {
-    this.authService.loginWithGoogle();
+    this.authService.loginWithGoogle().catch(console.log);
+  }
+
+  onLoginWithPhone() {
+    this.authService.loginWithPhone().catch(console.log);
   }
 
   onLoginWithFacebook() {

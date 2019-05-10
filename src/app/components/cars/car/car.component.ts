@@ -5,9 +5,9 @@ import {Router} from '@angular/router';
 import {AuthService} from '../../../core/auth.service';
 import {Observable, Subscription} from 'rxjs';
 import {Car} from '../shared/car.model';
-import {User} from 'firebase';
 import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
 import {map} from 'rxjs/operators';
+import {User} from '../../../core/user.model';
 
 @Component({
   selector: 'app-car',
@@ -19,13 +19,8 @@ export class CarComponent implements OnInit, OnDestroy {
   carName: string;
   isUserCar: boolean;
   carId: string;
-  user: User;
-  userPhoto: Observable<string>;
-  userName: Observable<string>;
-  userEmail: Observable<string>;
-  userPhone: Observable<string>;
+  carUser: Observable<User>;
   private currentCarSubscription: Subscription;
-  private currentUserSubscription: Subscription;
   constructor(private carService: CarService,
               private toastr: ToastrService,
               private authService: AuthService,
@@ -34,16 +29,6 @@ export class CarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.currentUserSubscription = this.authService.afAuth.authState
-      .subscribe(u => this.user = u);
-    this.userPhoto = this.authService.afAuth.authState
-      .pipe(map(u => u.photoURL));
-    this.userName = this.authService.afAuth.authState
-      .pipe(map(u => u.displayName));
-    this.userEmail = this.authService.afAuth.authState
-      .pipe(map(u => u.email));
-    this.userPhone = this.authService.afAuth.authState
-      .pipe(map(u => u.phoneNumber));
     this.currentCarSubscription = this.carService.getCurrentCar()
       .subscribe(value => {
         this.car = value;
@@ -52,6 +37,7 @@ export class CarComponent implements OnInit, OnDestroy {
           this.router.navigate(['']).catch(console.log);
           return;
         }
+        this.carUser = this.authService.getUserData(value.userID);
         if (value.category.make.label) {
           this.carName = value.category.make.label + ' ' + value.category.make.model.label;
         }
@@ -149,7 +135,6 @@ export class CarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.currentUserSubscription.unsubscribe();
     this.currentCarSubscription.unsubscribe();
   }
 }
