@@ -55,6 +55,7 @@ export class CarListComponent implements OnInit {
     if (confirm('Are sure to delete this record?') === true) {
       this.carService.deleteCar(key);
       this.toastr.warning('Deleted Successfully', 'Car register');
+      this.router.navigate(['']).catch(console.log);
     }
   }
   onOpenCarPage(car: Car) {
