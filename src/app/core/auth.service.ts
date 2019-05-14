@@ -5,37 +5,16 @@ import { Router } from '@angular/router';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {User} from './user.model';
+import {User as FirebaseUser} from 'firebase';
+import * as firebase from 'firebase/app';
+import ApplicationVerifier = firebase.auth.ApplicationVerifier;
+import ConfirmationResult = firebase.auth.ConfirmationResult;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  // user: Observable<User>;
-  //
-  // constructor(
-  //   private afAuth: AngularFireAuth,
-  //   private afs: AngularFirestore,
-  //   private router: Router
-  // ) {
-  //   this.user = this.afAuth.authState.pipe(
-  //     switchMap(user => {
-  //       // if (!user) return O
-  //       if (user) {
-  //         return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-  //       } else {
-  //         return of(null);
-  //       }
-  //     })
-  //     // switchMap(user => {
-  //     //   if (user) {
-  //     //     return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
-  //     //   } else {
-  //     //     return of(null);
-  //     //   }
-  //     // })
-  //   );
-  // }
-  // user: User;
+  private firebaseUser: FirebaseUser;
   currentUser: Observable<User>;
 
   constructor(public afAuth: AngularFireAuth,
@@ -43,9 +22,11 @@ export class AuthService {
               private angularFirestore: AngularFirestore) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        // this.user = user;
+        this.firebaseUser = user;
         this.currentUser = this.angularFirestore.doc<User>(`users/${user.uid}`)
           .valueChanges();
+        this.setUserData(user)
+          .catch(AuthService.handleError);
         localStorage.setItem('user', JSON.stringify(user));
         localStorage.setItem('userID', user.uid);
       } else {
@@ -53,6 +34,10 @@ export class AuthService {
         localStorage.removeItem('userID');
       }
     });
+  }
+
+  private static handleError(error: any) {
+    console.log(error);
   }
 
   public get isSignOut(): boolean {
@@ -68,68 +53,65 @@ export class AuthService {
     try {
       await this.afAuth.auth.signInWithEmailAndPassword(email, password);
       this.router.navigate(['/cars'])
-        .catch(console.log);
+        .catch(AuthService.handleError);
     } catch (e) {
       alert('Error!' + e.message);
     }
   }
-
-  // googleLogin() {
-  //   const provider = new auth.GoogleAuthProvider();
-  //   return this.oAuthLogin(provider);
-  // }
-  //
   async oAuthLogin(provider) {
     await this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
-        this.updateUserData(credential.user)
-          .catch(console.log);
+        this.setUserData(credential.user)
+          .catch(AuthService.handleError);
       });
     this.router.navigate([''])
-      .catch(console.log);
+      .catch(AuthService.handleError);
   }
 
-  private updateUserData(user) {
+  private async setUserData(user: FirebaseUser) {
     // Sets user data to firestore on login
-
-    console.log(user);
     const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(`users/${user.uid}`);
-
-    console.log(userRef);
     const data: User = {
       uid: user.uid,
-      phone: user.phoneNumber,
+      phoneNumber: user.phoneNumber,
       email: user.email,
       displayName: user.displayName,
-      photoURL: user.photoURL
+      photoURL: user.photoURL,
+      creationTime: user.metadata.creationTime
     };
-
-    return userRef.set(data, { merge: true });
-
+    return await userRef.set(data, { merge: true });
   }
+
+  async updateUserData(user: User) {
+    if (this.firebaseUser) {
+      if (user.displayName !== this.firebaseUser.displayName) {
+        await this.firebaseUser
+          .updateProfile({displayName: user.displayName})
+          .catch(AuthService.handleError);
+      }
+      await this.firebaseUser
+        .updatePassword(user.password)
+        .catch(AuthService.handleError);
+      await this.setUserData(this.firebaseUser)
+        .catch(AuthService.handleError);
+    }
+  }
+
   getUserData(userId: string): Observable<User> {
     return this.angularFirestore.doc<User>(`users/${userId}`)
       .valueChanges();
   }
-  //
-  // signOut() {
-  //   this.afAuth.auth.signOut().then(() => {
-  //     this.router.navigate(['/']).catch(console.log);
-  //   });
-  // }
 
   async logout() {
     await this.afAuth.auth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigate(['/login'])
-        .catch(console.log);
+        .catch(AuthService.handleError);
     });
   }
 
   async  loginWithGoogle() {
     await this.oAuthLogin(new auth.GoogleAuthProvider());
-    // await  this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
-    // this.router.navigate(['/cars']);
   }
 
   async  loginWithPhone() {
@@ -139,5 +121,16 @@ export class AuthService {
   async  loginWithFacebook() {
     await  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
     this.router.navigate(['/cars']);
+  }
+
+  async updatePhone(verificationId: string, verificationCode: string) {
+    const phoneCredential = firebase.auth.PhoneAuthProvider
+      .credential(verificationId, verificationCode);
+    return  await this.afAuth.auth.currentUser
+      .updatePhoneNumber(phoneCredential);
+  }
+  async signInWithPhoneNumber(phoneNumber: string, applicationVerifier: ApplicationVerifier): Promise<ConfirmationResult> {
+    return await this.afAuth.auth
+      .signInWithPhoneNumber(phoneNumber, applicationVerifier);
   }
 }

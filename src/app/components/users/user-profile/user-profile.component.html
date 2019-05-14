@@ -1,6 +1,6 @@
 <div class="col-sm-7 mx-auto mb-3 bg-light shadow-sm rounded-lg">
   <form *ngIf="currentUser | async as user"
-        #userForm="ngForm"
+        #userForm ="ngForm"
         (ngSubmit)="onSubmit(userForm)"
         class="was-validated p-3">
     <img class="form-group img-fluid rounded-circle mx-auto d-block" style="width: 200px; height: 200px;" [src]="user.photoURL"  src="#" alt="userPhoto">
@@ -16,31 +16,64 @@
              type="text" required>
     </div>
     <div class="form-group row">
-      <label class="col-sm-4 col-form-label" for="phone">Phone:</label>
-      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.phone}}</span>
-      <input *ngIf="isEdit" [(ngModel)]="user.phone"
-             class="col-sm-8"
-             id="phone"
-             placeholder="Phone"
-             name="phone"
-             type="tel" required>
+      <label class="col-sm-4 col-form-label" for="phoneNumber">Phone:</label>
+      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.phoneNumber}}</span>
+      <div *ngIf="isEdit" class="input-group col-sm-8 px-0">
+        <input class="form-control"
+               [disabled]="isPhoneVerified"
+               [(ngModel)]="phoneNumber.line"
+               id="phoneNumber"
+               minlength="11"
+               maxlength="12"
+               placeholder="Phone"
+               name="Phone"
+               type="text" required>
+        <div [hidden]="isPhoneVerified" class="input-group-append">
+          <button [disabled]="!isReCAPTCHA"
+                  (click)="verifyPhone()"
+                  class="btn btn-outline-success"
+                  type="button">Verify</button>
+        </div>
+        <div [hidden]="!isPhoneVerified" class="input-group-append">
+          <span class="input-group-text text-success">
+            <i class="fas fa-check-circle pr-2"></i>Verified</span>
+        </div>
+      </div>
+    </div>
+    <div [hidden]="isPhoneVerified" *ngIf="confirmationResult" class="form-group row">
+      <label class="col-sm-4 col-form-label" for="sms">sms</label>
+      <div class="input-group col-sm-8 px-0">
+        <input class="form-control" [(ngModel)]="verificationCode"
+               id="sms"
+               placeholder="sms"
+               minlength="6"
+               maxlength="6"
+               name="sms"
+               type="text" aria-describedby="verify-phone-button" required>
+        <div class="input-group-append">
+          <button [disabled]="!isReCAPTCHA" (click)="confirmPhone()"
+                  class="btn btn-outline-success"
+                  type="button"
+                  id="confirm-phone-button">Confirm</button>
+        </div>
+      </div>
     </div>
     <div class="form-group row">
       <label class="col-sm-4 col-form-label" for="email">Email:</label>
       <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.email}}</span>
       <input *ngIf="isEdit" [(ngModel)]="user.email"
-             class="col-sm-8"
+             class="col-sm-8 form-control"
              id="email"
              placeholder="Email"
              name="email"
              type="email" required>
     </div>
-    <div class="form-group row">
+    <div *ngIf="isEdit" class="form-group row">
       <label  class="col-sm-4 col-form-label" for="password">Password:</label>
-      <span *ngIf="!isEdit" class="col-sm-8 align-self-center">{{user.password}}</span>
-      <input *ngIf="isEdit" [(ngModel)]="user.password"
-             class="col-sm-8"
+      <input [(ngModel)]="user.password"
+             class="col-sm-8 form-control"
              id="password"
+             minlength="6"
              placeholder="Password"
              name="password"
              type="password" required>
@@ -51,4 +84,5 @@
       <button *ngIf="isEdit" class="btn btn-danger" type="button" (click)="onCancelForm(userForm)">Cancel</button>
     </div>
   </form>
+  <div [hidden]="!isEdit" class="pb-3 justify-content-center" id="recaptcha-container"></div>
 </div>
