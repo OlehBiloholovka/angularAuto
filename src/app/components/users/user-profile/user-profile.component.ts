@@ -53,7 +53,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       this.onUserEdit();
       this.formUser = carForm.value;
       this.formUser.uid = this.user.uid;
-      this.authService.updateUserData(carForm.value);
+      this.authService.updateUserData(carForm.value).catch(console.log);
     }
   }
 
