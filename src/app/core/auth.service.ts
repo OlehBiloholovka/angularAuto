@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { auth } from 'firebase/app';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {auth} from 'firebase/app';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {Router} from '@angular/router';
 import {Observable} from 'rxjs';
 import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
 import {User} from './user.model';
@@ -9,7 +9,6 @@ import {User as FirebaseUser} from 'firebase';
 import * as firebase from 'firebase/app';
 import ApplicationVerifier = firebase.auth.ApplicationVerifier;
 import ConfirmationResult = firebase.auth.ConfirmationResult;
-import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +42,7 @@ export class AuthService {
 
   public get isSignOut(): boolean {
     // return localStorage.getItem('user') === null;
-    return  this.getUserId === null;
+    return this.getUserId === null;
   }
 
   public get getUserId(): string {
@@ -65,6 +64,7 @@ export class AuthService {
       alert('Error!' + e.message);
     }
   }
+
   async oAuthLogin(provider) {
     await this.afAuth.auth.signInWithPopup(provider)
       .then((credential) => {
@@ -91,7 +91,7 @@ export class AuthService {
       photoURL: user.photoURL,
       creationTime: user.metadata.creationTime
     };
-    return await userRef.set(data, { merge: true });
+    return await userRef.set(data, {merge: true});
   }
 
   async updateUserData(user: User) {
@@ -122,37 +122,41 @@ export class AuthService {
     });
   }
 
-  async  loginWithGoogle() {
+  async loginWithGoogle() {
     await this.oAuthLogin(new auth.GoogleAuthProvider());
   }
 
-  async  loginWithPhone() {
+  async loginWithPhone() {
     await this.oAuthLogin(new auth.PhoneAuthProvider());
   }
 
-  async  loginWithFacebook() {
-    await  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
+  async loginWithFacebook() {
+    await this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
     this.router.navigate(['/cars']);
   }
 
   async updatePhone(verificationId: string, verificationCode: string) {
     const phoneCredential = firebase.auth.PhoneAuthProvider
       .credential(verificationId, verificationCode);
-    return  await this.afAuth.auth.currentUser
+    return await this.afAuth.auth.currentUser
       .updatePhoneNumber(phoneCredential);
   }
+
   async signInWithPhoneNumber(phoneNumber: string, applicationVerifier: ApplicationVerifier): Promise<ConfirmationResult> {
     return await this.afAuth.auth
       .signInWithPhoneNumber(phoneNumber, applicationVerifier);
   }
+
   async sendEmailVerification() {
     await this.afAuth.auth.currentUser.sendEmailVerification();
     // this.router.navigate(['admin/verify-email']);
   }
+
   async register(email: string, password: string) {
     const result = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
     await this.sendEmailVerification();
   }
+
   getCurrentUser(): Observable<User> {
     return this.currentUser;
   }
