@@ -114,6 +114,7 @@ export class CarService {
             this.currentCarBehaviorSubject.value.photoURLs = Object.values(this.currentCar.photoURLs);
           }
           this.currentCarBehaviorSubject.value.photoURLs.unshift(url);
+          this.currentCar.photoURLs = this.currentCarBehaviorSubject.value.photoURLs;
           this.uploadPercent = undefined;
           // if (this.currentCar.photoURLs === undefined) {
           //   this.currentCar.photoURLs = [];

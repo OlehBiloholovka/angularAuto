@@ -42,7 +42,7 @@
         </div>
       </div>
       <div class="col-md-9 px-0">
-        <img class="img-fluid" style="max-width: 100%; height: auto" [src]="car.photoURLs[0]" src="#" alt="carPhoto">
+        <img *ngIf="car.photoURLs" class="img-fluid" style="max-width: 100%; height: auto" [src]="car.photoURLs[0]" src="#" alt="carPhoto">
       </div>
     </div>
   </div>
@@ -62,21 +62,23 @@
         <span>Model: </span>
         <span>{{car.category.make.model.label}}</span>
       </div>
-      <div class="col-md-3">
+      <div *ngIf="car.category.driverType && car.category.driverType.id" class="col-md-3">
         <span>Driver type: </span>
         <span>{{car.category.driverType.label}}</span>
       </div>
-      <div class="col-md-3">
+      <div *ngIf="car.category.gearBox && car.category.gearBox.id" class="col-md-3">
         <span>Gearbox: </span>
         <span>{{car.category.gearBox.label}}</span>
-      </div><div class="col-md-3">
-      <span>Body style: </span>
-      <span>{{car.category.bodyStyle.label}}</span>
-    </div><div class="col-md-3">
-      <span>Engine type: </span>
-      <span>{{car.engineType.label}}</span>
-    </div>
+      </div>
       <div class="col-md-3">
+        <span>Body style: </span>
+        <span>{{car.category.bodyStyle.label}}</span>
+      </div>
+      <div *ngIf="car.engineType && car.engineType.id" class="col-md-3">
+        <span>Engine type: </span>
+        <span>{{car.engineType.label}}</span>
+      </div>
+      <div *ngIf="car.capacity" class="col-md-3">
         <span>Capacity: </span>
         <span>{{car.capacity}}</span>
       </div>
@@ -100,14 +102,14 @@
         <span>Year: </span>
         <span>{{car.year}}</span>
       </div>
-      <div class="col-md-3">
+      <div *ngIf="car.color && car.color.id" class="col-md-3">
         <span>Color: </span>
         <span>{{car.color.label}}</span>
       </div>
     </div>
   </div>
   <hr class="mx-1">
-  <div>
+  <div *ngIf="car.category.options">
     <span class="h3">Options</span>
     <div class="row pt-2">
       <div *ngFor="let opt of car.category.options" class="col-md-3">

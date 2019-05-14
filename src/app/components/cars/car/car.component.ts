@@ -59,20 +59,24 @@ export class CarComponent implements OnInit, OnDestroy {
         map(cities => cities[0].name)
       )
       .subscribe(v => this.car.region.city.label = v);
-    this.autoRiaService.getColors()
-      .pipe(
-        map(colors =>
-          colors.filter(color => color.value.toString() === currentCar.color.id.toString())),
-        map(colors => colors[0].name)
-      )
-      .subscribe(v => this.car.color.label = v);
-    this.autoRiaService.getEngineTypes()
-      .pipe(
-        map(engineTypes =>
-          engineTypes.filter(engineType => engineType.value.toString() === currentCar.engineType.id.toString())),
-        map(engineType => engineType[0].name)
-      )
-      .subscribe(v => this.car.engineType.label = v);
+    if (currentCar.color && currentCar.color.id) {
+      this.autoRiaService.getColors()
+        .pipe(
+          map(colors =>
+            colors.filter(color => color.value.toString() === currentCar.color.id.toString())),
+          map(colors => colors[0].name)
+        )
+        .subscribe(v => this.car.color.label = v);
+    }
+    if (currentCar.engineType && currentCar.engineType.id) {
+      this.autoRiaService.getEngineTypes()
+        .pipe(
+          map(engineTypes =>
+            engineTypes.filter(engineType => engineType.value.toString() === currentCar.engineType.id.toString())),
+          map(engineType => engineType[0].name)
+        )
+        .subscribe(v => this.car.engineType.label = v);
+    }
     this.autoRiaService.getBodyStyles(currentCar.category.id)
       .pipe(
         map(bodyStyles =>
@@ -80,20 +84,24 @@ export class CarComponent implements OnInit, OnDestroy {
         map(bodyStyle => bodyStyle[0].name)
       )
       .subscribe(v => this.car.category.bodyStyle.label = v);
-    this.autoRiaService.getGearboxes(currentCar.category.id)
-      .pipe(
-        map(gearboxes =>
-          gearboxes.filter(gearbox => gearbox.value.toString() === currentCar.category.gearBox.id.toString())),
-        map(gearboxes => gearboxes[0].name)
-      )
-      .subscribe(v => this.car.category.gearBox.label = v);
-    this.autoRiaService.getDriverTypes(currentCar.category.id)
-      .pipe(
-        map(driverTypes =>
-          driverTypes.filter(driverType => driverType.value.toString() === currentCar.category.driverType.id.toString())),
-        map(driverTypes => driverTypes[0].name)
-      )
-      .subscribe(v => this.car.category.driverType.label = v);
+    if (currentCar.category.gearBox && currentCar.category.gearBox.id) {
+      this.autoRiaService.getGearboxes(currentCar.category.id)
+        .pipe(
+          map(gearboxes =>
+            gearboxes.filter(gearbox => gearbox.value.toString() === currentCar.category.gearBox.id.toString())),
+          map(gearboxes => gearboxes[0].name)
+        )
+        .subscribe(v => this.car.category.gearBox.label = v);
+    }
+    if (currentCar.category.driverType && currentCar.category.driverType.id) {
+      this.autoRiaService.getDriverTypes(currentCar.category.id)
+        .pipe(
+          map(driverTypes =>
+            driverTypes.filter(driverType => driverType.value.toString() === currentCar.category.driverType.id.toString())),
+          map(driverTypes => driverTypes[0].name)
+        )
+        .subscribe(v => this.car.category.driverType.label = v);
+    }
     this.autoRiaService.getModels(currentCar.category.id, currentCar.category.make.id)
       .pipe(
         map(models =>
@@ -115,13 +123,15 @@ export class CarComponent implements OnInit, OnDestroy {
         map(categories => categories[0].name)
       )
       .subscribe(v => this.car.category.label = v);
-    this.autoRiaService.getOptions(currentCar.category.id)
-      .subscribe(options => {
-        this.car.category.options.forEach(option => {
-          option.label = options
-            .filter(o => o.value.toString() === option.id.toString())[0].name;
+    if (currentCar.category.options) {
+      this.autoRiaService.getOptions(currentCar.category.id)
+        .subscribe(options => {
+          this.car.category.options.forEach(option => {
+            option.label = options
+              .filter(o => o.value.toString() === option.id.toString())[0].name;
+          });
         });
-      });
+    }
     return currentCar;
   }
   onEdit() {
@@ -131,6 +141,7 @@ export class CarComponent implements OnInit, OnDestroy {
     if (confirm('Are sure to delete this record?') === true) {
       this.carService.deleteCar(this.carId);
       this.toastr.warning('Deleted Successfully', 'Car register');
+      this.router.navigate(['']).catch(console.log);
     }
   }
 
