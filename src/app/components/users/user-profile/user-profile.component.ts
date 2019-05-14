@@ -39,7 +39,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
     if (this.currentUser) {
-      this.userSubscription = this.currentUser.subscribe(value => this.user = value);
+      this.userSubscription = this.currentUser
+        .subscribe(value => this.user = value);
     }
     this.windowRef = this.windowService.windowRef;
     this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container'
@@ -48,7 +49,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(carForm: NgForm) {
-    if (this.user.phoneNumber) {
+    if (this.user.phoneNumber || this.isPhoneVerified) {
       this.onUserEdit();
       this.formUser = carForm.value;
       this.formUser.uid = this.user.uid;
