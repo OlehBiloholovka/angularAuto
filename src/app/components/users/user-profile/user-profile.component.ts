@@ -37,7 +37,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
               private windowService: WindowService) { }
 
   ngOnInit() {
-    this.currentUser = this.authService.currentUser;
+    this.currentUser = this.authService.getCurrentUser();
     if (this.currentUser) {
       this.userSubscription = this.currentUser.subscribe(value => this.user = value);
     }

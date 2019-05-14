@@ -9,13 +9,14 @@ import {User as FirebaseUser} from 'firebase';
 import * as firebase from 'firebase/app';
 import ApplicationVerifier = firebase.auth.ApplicationVerifier;
 import ConfirmationResult = firebase.auth.ConfirmationResult;
+import {el} from '@angular/platform-browser/testing/src/browser_util';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private firebaseUser: FirebaseUser;
-  currentUser: Observable<User>;
+  private currentUser: Observable<User>;
 
   constructor(public afAuth: AngularFireAuth,
               public router: Router,
@@ -51,9 +52,15 @@ export class AuthService {
 
   async login(email: string, password: string) {
     try {
-      await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-      this.router.navigate(['/cars'])
-        .catch(AuthService.handleError);
+      await this.afAuth.auth.signInWithEmailAndPassword(email, password).then(res => {
+        if (res.user.phoneNumber) {
+          this.router.navigate([''])
+            .catch(AuthService.handleError);
+        } else {
+          this.router.navigate(['/user/profile'])
+            .catch(AuthService.handleError);
+        }
+      });
     } catch (e) {
       alert('Error!' + e.message);
     }
@@ -63,9 +70,14 @@ export class AuthService {
       .then((credential) => {
         this.setUserData(credential.user)
           .catch(AuthService.handleError);
+        if (!credential.user.phoneNumber) {
+          this.router.navigate(['/user/profile'])
+            .catch(AuthService.handleError);
+        } else {
+          this.router.navigate([''])
+            .catch(AuthService.handleError);
+        }
       });
-    this.router.navigate([''])
-      .catch(AuthService.handleError);
   }
 
   private async setUserData(user: FirebaseUser) {
@@ -132,5 +144,16 @@ export class AuthService {
   async signInWithPhoneNumber(phoneNumber: string, applicationVerifier: ApplicationVerifier): Promise<ConfirmationResult> {
     return await this.afAuth.auth
       .signInWithPhoneNumber(phoneNumber, applicationVerifier);
+  }
+  async sendEmailVerification() {
+    await this.afAuth.auth.currentUser.sendEmailVerification();
+    // this.router.navigate(['admin/verify-email']);
+  }
+  async register(email: string, password: string) {
+    const result = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+    await this.sendEmailVerification();
+  }
+  getCurrentUser(): Observable<User> {
+    return this.currentUser;
   }
 }

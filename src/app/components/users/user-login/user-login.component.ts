@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import {AuthService} from '../../../core/auth.service';
-import {WindowService} from '../../../core/window.service';
 import {User} from 'firebase';
 
 @Component({
@@ -17,7 +16,7 @@ export class UserLoginComponent implements OnInit {
   ngOnInit() {
   }
   onLogin(email: string, password: string) {
-    this.authService.login(email, password);
+    this.authService.login(email, password).catch(console.log);
   }
 
 
@@ -31,5 +30,10 @@ export class UserLoginComponent implements OnInit {
 
   onLoginWithFacebook() {
     this.authService.loginWithFacebook();
+  }
+  onRegister(email: string, password: string) {
+    this.authService.register(email, password)
+      .then()
+      .catch(console.log);
   }
 }
