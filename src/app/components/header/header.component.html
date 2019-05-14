@@ -42,30 +42,45 @@
     </a>
   </div>
 </div>
-<div class="collapse border-bottom shadow-sm d-md-none bg-light px-5" id="myMenu">
-  <div class="d-flex d-row justify-content-between">
-    <a *ngIf="isLoggedIn" class="p-2 text-dark" href="#" [routerLink]="['user', getUserID(), 'cars']">My Cars</a>
-    <a class="btn p-0 d-flex flex-row align-items-center d-sm-none" href="#" routerLink="user/form">
-      <div class="btn btn-success group-form">
-        <i class="fas fa-plus mr-2"></i>Sell your car
-      </div>
-    </a>
-    <div class="d-sm-none">
-      <a href="#" class="btn p-0"
-         *ngIf="!isLoggedIn"
-         routerLink="/login">
-        <div class="btn btn-outline-primary">
-          Sign up
+<div class="collapse border-bottom shadow-sm d-md-none bg-light px-5 sidebar" id="myMenu">
+  <div class="d-flex flex-column justify-content-between sidebar-sticky">
+    <ul class="nav flex-column nav-pills">
+      <li class="nav-item">
+        <a class="btn p-0 d-flex flex-row align-items-center d-sm-none" href="#" routerLink="user/form">
+          <div class="btn btn-block btn-success group-form">
+            <i class="fas fa-plus mr-2"></i>Sell your car
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user', getUserID(), 'cars']" [routerLinkActive]="'active'">My cars</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user', 'form']" [routerLinkActive]="'active'">Edit car</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" [routerLink]="['user', 'profile']" [routerLinkActive]="'active'">Profile</a>
+      </li>
+      <hr class="mx-1">
+      <li class="nav-item pb-2">
+        <div class="d-sm-none">
+          <a href="#" class="btn btn-block p-0"
+             *ngIf="!isLoggedIn"
+             routerLink="/login">
+            <div class="btn btn-outline-primary">
+              Sign up
+            </div>
+          </a>
+          <a href="#" class="btn btn-block p-0"
+             *ngIf="isLoggedIn"
+             (click)="onLogout()">
+            <div class="btn btn-outline-danger">
+              Logout
+            </div>
+          </a>
         </div>
-      </a>
-      <a href="#" class="btn p-0"
-         *ngIf="isLoggedIn"
-         (click)="onLogout()">
-        <div class="btn btn-outline-danger">
-          Logout
-        </div>
-      </a>
-    </div>
+      </li>
+    </ul>
   </div>
 </div>
 
