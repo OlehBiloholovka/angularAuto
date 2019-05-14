@@ -1,22 +1,34 @@
-import { Injectable } from '@angular/core';
-import { User } from 'firebase';
-import { auth } from 'firebase/app';
-import { AngularFireAuth } from '@angular/fire/auth';
-import { Router } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {auth} from 'firebase/app';
+import {AngularFireAuth} from '@angular/fire/auth';
+import {Router} from '@angular/router';
+import {Observable} from 'rxjs';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {User} from './user.model';
+import {User as FirebaseUser} from 'firebase';
+import * as firebase from 'firebase/app';
+import ApplicationVerifier = firebase.auth.ApplicationVerifier;
+import ConfirmationResult = firebase.auth.ConfirmationResult;
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private firebaseUser: FirebaseUser;
+  private currentUser: Observable<User>;
 
-  user: User;
-
-  constructor(public afAuth: AngularFireAuth, public router: Router) {
+  constructor(public afAuth: AngularFireAuth,
+              public router: Router,
+              private angularFirestore: AngularFirestore) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        this.user = user;
-        localStorage.setItem('user', JSON.stringify(this.user));
-        localStorage.setItem('userID', this.user.uid);
+        this.firebaseUser = user;
+        this.currentUser = this.angularFirestore.doc<User>(`users/${user.uid}`)
+          .valueChanges();
+        this.setUserData(user)
+          .catch(AuthService.handleError);
+        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem('userID', user.uid);
       } else {
         localStorage.setItem('user', null);
         localStorage.removeItem('userID');
@@ -24,9 +36,13 @@ export class AuthService {
     });
   }
 
+  private static handleError(error: any) {
+    console.log(error);
+  }
+
   public get isSignOut(): boolean {
     // return localStorage.getItem('user') === null;
-    return  this.getUserId === null;
+    return this.getUserId === null;
   }
 
   public get getUserId(): string {
@@ -35,27 +51,113 @@ export class AuthService {
 
   async login(email: string, password: string) {
     try {
-      await this.afAuth.auth.signInWithEmailAndPassword(email, password);
-      this.router.navigate(['/cars'])
-        .catch(console.log);
+      await this.afAuth.auth.signInWithEmailAndPassword(email, password).then(res => {
+        if (res.user.phoneNumber) {
+          this.router.navigate([''])
+            .catch(AuthService.handleError);
+        } else {
+          this.router.navigate(['/user/profile'])
+            .catch(AuthService.handleError);
+        }
+      });
     } catch (e) {
       alert('Error!' + e.message);
     }
   }
 
+  async oAuthLogin(provider) {
+    await this.afAuth.auth.signInWithPopup(provider)
+      .then((credential) => {
+        this.setUserData(credential.user)
+          .catch(AuthService.handleError);
+        if (!credential.user.phoneNumber) {
+          this.router.navigate(['/user/profile'])
+            .catch(AuthService.handleError);
+        } else {
+          this.router.navigate([''])
+            .catch(AuthService.handleError);
+        }
+      });
+  }
+
+  private async setUserData(user: FirebaseUser) {
+    // Sets user data to firestore on login
+    const userRef: AngularFirestoreDocument<any> = this.angularFirestore.doc(`users/${user.uid}`);
+    const data: User = {
+      uid: user.uid,
+      phoneNumber: user.phoneNumber,
+      email: user.email,
+      displayName: user.displayName,
+      photoURL: user.photoURL,
+      creationTime: user.metadata.creationTime
+    };
+    return await userRef.set(data, {merge: true});
+  }
+
+  async updateUserData(user: User) {
+    if (this.firebaseUser) {
+      if (user.displayName !== this.firebaseUser.displayName) {
+        await this.firebaseUser
+          .updateProfile({displayName: user.displayName})
+          .catch(AuthService.handleError);
+      }
+      await this.firebaseUser
+        .updatePassword(user.password)
+        .catch(AuthService.handleError);
+      await this.setUserData(this.firebaseUser)
+        .catch(AuthService.handleError);
+    }
+  }
+
+  getUserData(userId: string): Observable<User> {
+    return this.angularFirestore.doc<User>(`users/${userId}`)
+      .valueChanges();
+  }
+
   async logout() {
-    await this.afAuth.auth.signOut();
-    localStorage.removeItem('user');
-    this.router.navigate(['/login']);
+    await this.afAuth.auth.signOut().then(() => {
+      localStorage.removeItem('user');
+      this.router.navigate(['/login'])
+        .catch(AuthService.handleError);
+    });
   }
 
-  async  loginWithGoogle() {
-    await  this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+  async loginWithGoogle() {
+    await this.oAuthLogin(new auth.GoogleAuthProvider());
+  }
+
+  async loginWithPhone() {
+    await this.oAuthLogin(new auth.PhoneAuthProvider());
+  }
+
+  async loginWithFacebook() {
+    await this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
     this.router.navigate(['/cars']);
   }
 
-  async  loginWithFacebook() {
-    await  this.afAuth.auth.signInWithPopup(new auth.FacebookAuthProvider());
-    this.router.navigate(['/cars']);
+  async updatePhone(verificationId: string, verificationCode: string) {
+    const phoneCredential = firebase.auth.PhoneAuthProvider
+      .credential(verificationId, verificationCode);
+    return await this.afAuth.auth.currentUser
+      .updatePhoneNumber(phoneCredential);
+  }
+
+  async signInWithPhoneNumber(phoneNumber: string, applicationVerifier: ApplicationVerifier): Promise<ConfirmationResult> {
+    return await this.afAuth.auth
+      .signInWithPhoneNumber(phoneNumber, applicationVerifier);
+  }
+
+  async sendEmailVerification() {
+    await this.afAuth.auth.currentUser.sendEmailVerification();
+    // this.router.navigate(['admin/verify-email']);
+  }
+
+  async register(email: string, password: string) {
+    const result = await this.afAuth.auth.createUserWithEmailAndPassword(email, password);
+    await this.sendEmailVerification();
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.currentUser;
   }
 }

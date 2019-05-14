@@ -8,16 +8,24 @@
             <div class="col-md-4 text-center">
               <img src="https://placeimg.com/128/128/nature" alt="photo">
             </div>
-            <div class="col-md-8">
+            <div class="d-flex flex-column col-md-8">
 
               <input type="text" class="form-control mb-2" placeholder="Email" #userEmail required autofocus>
               <input type="password" class="form-control mb-2" placeholder="Password" #userPassword required>
-              <button class="btn btn-lg btn-success btn-block mb-1"
-                      (click)="onLogin(userEmail.value, userPassword.value)">Login</button>
-              <button class="btn btn-lg btn-primary btn-block mb-1"
+              <div class="btn-group mb-2">
+                <button class="btn btn-lg btn-success"
+                        (click)="onLogin(userEmail.value, userPassword.value)">Sign in</button>
+                <button class="btn btn-lg btn-outline-secondary"
+                        (click)="onRegister(userEmail.value, userPassword.value)">Sign up</button>
+              </div>
+              <button class="btn btn-lg btn-warning btn-block mb-1"
                       (click)="onLoginWithGoogle()">
                 <i class="fab fa-google"></i> Connect Google
               </button>
+<!--              <button class="btn btn-lg btn-primary btn-block mb-1"-->
+<!--                      (click)="onLoginWithPhone()">-->
+<!--                <i class="fab fa-google"></i> Connect Phone-->
+<!--              </button>-->
               <button *ngIf="false" class="btn btn-lg btn-primary btn-block mb-1"
                       (click)="onLoginWithFacebook()">
                 <i class="fab fa-facebook"></i> Connect Facebook
