@@ -24,11 +24,17 @@
               <img *ngIf="user.photoURL" class="img-fluid rounded-circle" style="width: 48px; height: 48px" [src]="user.photoURL"  src="#" alt="userPhoto">
               <div class="d-flex flex-column ml-2 justify-content-center">
                 <span class="h5 mb-0">{{user.displayName}}</span>
-                <small><a href="mailto:{{user.email}}">{{user.email}}</a></small>
-                <small class="font-weight-light font-italic">from {{user.creationTime | date: 'dd/MM/yyyy'}}</small>
+                <small class="font-weight-light font-italic">from {{user.creationTime | date: 'dd.MM.yyyy'}}</small>
               </div>
             </div>
-            <a href="tel:{{user.phoneNumber}}" class="btn btn-block btn-success mt-2">{{user.phoneNumber}}</a>
+            <a href="tel:{{user.phoneNumber}}" class="btn btn-block btn-success mt-2 d-flex flex-row">
+              <i class="fas fa-lg fa-phone my-auto"></i>
+              <span class="mx-auto">{{user.phoneNumber}}</span>
+            </a>
+            <a href="mailto:{{user.email}}" class="btn btn-block btn-primary mt-2 d-flex flex-row">
+              <i class="far fa-lg fa-envelope my-auto"></i>
+              <span class="mx-auto">Send mail</span>
+            </a>
           </div>
         </div>
       </div>
