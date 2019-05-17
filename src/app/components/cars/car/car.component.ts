@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, HostListener, OnDestroy, OnInit} from '@angular/core';
 import { CarService } from '../shared/car.service';
 import { ToastrService } from 'ngx-toastr';
 import {Router} from '@angular/router';
@@ -8,13 +8,29 @@ import {Car} from '../shared/car.model';
 import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
 import {map} from 'rxjs/operators';
 import {User} from '../../../core/user.model';
+import {animate, state, style, transition, trigger} from '@angular/animations';
 
 @Component({
   selector: 'app-car',
   templateUrl: './car.component.html',
-  styleUrls: ['./car.component.css']
+  styleUrls: ['./car.component.css'],
+  animations: [
+    trigger('scrollAnimation', [
+      state('show', style({
+        opacity: 1,
+        transform: 'translateY(0)'
+      })),
+      state('hide',   style({
+        opacity: 0,
+        transform: 'translateY(-110%)'
+      })),
+      transition('show => hide', animate('300ms ease-out')),
+      transition('hide => show', animate('300ms ease-in'))
+    ])
+  ]
 })
 export class CarComponent implements OnInit, OnDestroy {
+  state = 'hide';
   car: Car;
   carName: string;
   isUserCar: boolean;
@@ -25,7 +41,20 @@ export class CarComponent implements OnInit, OnDestroy {
               private toastr: ToastrService,
               private authService: AuthService,
               private autoRiaService: AutoRiaService,
-              private router: Router) {
+              private router: Router,
+              public el: ElementRef) {
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  checkScroll() {
+    const componentPosition = this.el.nativeElement.offsetTop;
+    const scrollPosition = window.pageYOffset;
+
+    if (scrollPosition >= componentPosition) {
+      this.state = 'show';
+    } else {
+      this.state = 'hide';
+    }
   }
 
   ngOnInit(): void {
@@ -147,5 +176,9 @@ export class CarComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.currentCarSubscription.unsubscribe();
+  }
+
+  onOpenUserCars(uid: string) {
+    this.router.navigate(['/cars', uid]).catch(console.log);
   }
 }
