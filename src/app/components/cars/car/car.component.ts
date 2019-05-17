@@ -177,4 +177,8 @@ export class CarComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.currentCarSubscription.unsubscribe();
   }
+
+  onOpenUserCars(uid: string) {
+    this.router.navigate(['/cars', uid]).catch(console.log);
+  }
 }

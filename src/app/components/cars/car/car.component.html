@@ -28,7 +28,7 @@
           </div>
           <div class="dropdown-divider"></div>
           <div *ngIf="carUser | async as user" class="d-flex flex-column">
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row" style="cursor: pointer;" (click)="onOpenUserCars(user.uid)">
               <img *ngIf="user.photoURL" class="img-fluid rounded-circle" style="width: 48px; height: 48px" [src]="user.photoURL"  src="#" alt="userPhoto">
               <div class="d-flex flex-column ml-2 justify-content-center">
                 <span class="h5 mb-0">{{user.displayName}}</span>
