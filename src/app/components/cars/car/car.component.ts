@@ -9,6 +9,7 @@ import {AutoRiaService} from '../shared/auto-ria/auto-ria.service';
 import {map} from 'rxjs/operators';
 import {User} from '../../../core/user.model';
 import {animate, state, style, transition, trigger} from '@angular/animations';
+import {ScrollTopService} from '../../../core/scroll-top.service';
 
 @Component({
   selector: 'app-car',
@@ -41,6 +42,7 @@ export class CarComponent implements OnInit, OnDestroy {
               private toastr: ToastrService,
               private authService: AuthService,
               private autoRiaService: AutoRiaService,
+              private scrollTopService: ScrollTopService,
               private router: Router,
               public el: ElementRef) {
   }
@@ -58,6 +60,7 @@ export class CarComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.scrollTopService.setScrollTop();
     this.currentCarSubscription = this.carService.getCurrentCar()
       .subscribe(value => {
         this.car = value;
